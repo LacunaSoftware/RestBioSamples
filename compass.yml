@@ -1,0 +1,16 @@
+name: RestBioSamples
+id: ari:cloud:compass:a2e680e8-84b4-492b-b81a-63ccf54df4ee:component/08293dd5-9ad1-4ed5-b339-095a7626ef2b/342865af-4c45-408f-877b-e6bfe0a8c73f
+description: null
+configVersion: 1
+typeId: SERVICE
+fields:
+  tier: 4
+links:
+  - name: null
+    type: REPOSITORY
+    url: https://github.com/LacunaSoftware/RestBioSamples
+relationships:
+  DEPENDS_ON: []
+labels:
+  - source:github
+customFields: null
