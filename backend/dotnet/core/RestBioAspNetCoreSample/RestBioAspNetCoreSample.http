@@ -1,0 +1,6 @@
+@RestBioAspNetCoreSample_HostAddress = http://localhost:5078
+
+GET {{RestBioAspNetCoreSample_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
