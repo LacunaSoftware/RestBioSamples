@@ -1,0 +1,32 @@
+
+<main class="container">
+  <h1>{{ title }}</h1>
+
+  <div class="form-row">
+    <label for="type">Session type</label>
+    <select id="type" [ngModel]="selectedType()" (ngModelChange)="selectedType.set($event)">
+      <option *ngFor="let t of sessionTypes" [ngValue]="t">{{ t }}</option>
+    </select>
+    <button [disabled]="!isStartEnabled()" (click)="onStart()">Start {{ currentLabel() }} session</button>
+  </div>
+
+  <div class="form-row" *ngIf="sessionId() as sid">
+    <div>SessionId: <code>{{ sid }}</code></div>
+    <div *ngIf="sessionUrl() as url">SessionUrl: <a [href]="url" target="_blank">open</a></div>
+  </div>
+
+  <div class="form-row">
+    <label for="ticket">Ticket / SessionId</label>
+    <input id="ticket" type="text" [ngModel]="ticket() ?? ''" (ngModelChange)="ticket.set($event)" placeholder="Paste ticket or session id" />
+  </div>
+
+  <div class="form-row">
+    <button [disabled]="!isGetStatusEnabled()" (click)="onGetStatus()">Get {{ currentLabel() }} session status</button>
+  </div>
+
+  <div class="form-row">
+    <button [disabled]="!isCompleteEnabled()" (click)="onComplete()">Complete {{ currentLabel() }} session</button>
+  </div>
+
+  <pre *ngIf="lastStatus() as st">{{ st | json }}</pre>
+</main>
