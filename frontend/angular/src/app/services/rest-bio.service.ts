@@ -27,7 +27,7 @@ export interface BioSubjectReference {
 
 // TODO: Rename to RestBioService
 @Injectable({ providedIn: 'root' })
-export class BioSessionService {
+export class RestBioService {
 	private readonly http = inject(HttpClient);
 
 	// Implemented backend endpoints (only liveness for now)

@@ -1,3 +1,13 @@
 import { Routes } from '@angular/router';
+import { AuthenticationComponent } from './authentication/authentication.component';
+import { EnrollmentComponent } from './enrollment/enrollment.component';
+import { IdentificationDocumentCaptureComponent } from './identification-document-capture/identification-document-capture.component';
+import { LivenessComponent } from './liveness/liveness.component';
 
-export const routes: Routes = [];
+export const routes: Routes = [
+  { path: '', redirectTo: '/liveness', pathMatch: 'full' },
+  { path: 'liveness', component: LivenessComponent },
+  { path: 'enrollment', component: EnrollmentComponent },
+  { path: 'authentication', component: AuthenticationComponent },
+  { path: 'identification-document-capture', component: IdentificationDocumentCaptureComponent }
+];
