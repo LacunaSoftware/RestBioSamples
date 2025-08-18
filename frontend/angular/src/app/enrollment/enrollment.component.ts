@@ -4,12 +4,13 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import RestPkiWidget, { BioSessionInterruptedError } from 'lacuna-restpki-widget';
 import { firstValueFrom } from 'rxjs';
-import { BioSessionService, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/bio-session.service';
+import { RestBioService, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/rest-bio.service';
+import { SubjectIdentifierInputComponent } from '../subject-identifier-input/subject-identifier-input.component';
 
 @Component({
 	selector: 'app-enrollment',
 	standalone: true,
-	imports: [CommonModule, FormsModule, HttpClientModule],
+	imports: [CommonModule, FormsModule, HttpClientModule, SubjectIdentifierInputComponent],
 	templateUrl: './enrollment.component.html',
 	styleUrl: './enrollment.component.scss'
 })
@@ -25,7 +26,7 @@ export class EnrollmentComponent {
 	errorMessage = signal<string | null>(null);
 	errorDetails = signal<string | null>(null);
 
-	constructor(private readonly bio: BioSessionService) { }
+	constructor(private readonly bio: RestBioService) { }
 
 	async onStart(): Promise<void> {
 		this.resetStateForNewSession();
@@ -33,7 +34,7 @@ export class EnrollmentComponent {
 
 		try {
 			// Generate a unique subject identifier for this enrollment session
-			const subjectIdentifier = 'user-' + Date.now();
+			const subjectIdentifier = SubjectIdentifierInputComponent.subjectIdentifier;
 			const captureIdentificationDocument = false;
 			const dangerousOverrideIfAlreadyEnrolled = true;
 			const res: StartBioSessionResponse = await firstValueFrom(this.bio.startEnrollmentSession(subjectIdentifier, captureIdentificationDocument, dangerousOverrideIfAlreadyEnrolled));

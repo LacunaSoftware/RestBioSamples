@@ -25,6 +25,24 @@ export interface BioSubjectReference {
 	identifier?: string;
 }
 
+export interface BlobModel {
+	content: string;
+	contentType: string;
+}
+
+export interface BioSubjectEnrollment2dRequest {
+	subjectIdentifier: string;
+	faceImage?: BlobModel;
+}
+
+export interface BioSubjectEnrollment2dResponse {
+	sessionId: string;
+	success: boolean;
+	result?: {
+		subjectId: string;
+	};
+}
+
 // TODO: Rename to RestBioService
 @Injectable({ providedIn: 'root' })
 export class RestBioService {
@@ -74,6 +92,16 @@ export class RestBioService {
 		}
 		const queryString = params.toString();
 		return this.http.post<StartBioSessionResponse>(`/api/bio/session/authentication?${queryString}`, {});
+	}
+
+	enrollment2d(subjectIdentifier: string, image: string): Observable<BioSubjectEnrollment2dResponse> {
+		const body: BioSubjectEnrollment2dRequest = {
+			subjectIdentifier, faceImage: {
+				content: image,
+				contentType: "image/jpeg" // TODO: make changeable
+			}
+		};
+		return this.http.post<BioSubjectEnrollment2dResponse>(`/api/bio/enrollment-2d`, body);
 	}
 
 	getAuthenticationSessionStatus(sessionId: string): Observable<any> {

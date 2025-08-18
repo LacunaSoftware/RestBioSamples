@@ -1,41 +1,39 @@
 <div class="session-content">
-  <h2>Enrollment Authentication</h2>
-  
-  <div class="form-row">
-    <button 
-      [disabled]="!isStartEnabled() || isLoading()" 
-      (click)="onStart()">
-      {{ isLoading() ? 'Starting...' : 'Start Enrollment Session' }}
-    </button>
-  </div>
+	<h2>Enrollment</h2>
 
-  <div class="error-message" *ngIf="errorMessage() as error" style="color: red; margin: 10px 0; font-weight: bold;">
-    {{ error }}
-  </div>
+	<app-subject-identifier-input></app-subject-identifier-input>
 
-  <div class="error-details" *ngIf="errorDetails()" style="margin: 10px 0;">
-    <details>
-      <summary style="cursor: pointer; color: #666; font-weight: bold;">Show Error Details</summary>
-      <textarea 
-        readonly 
-        [value]="errorDetails()" 
-        style="width: 100%; height: 200px; margin-top: 10px; font-family: monospace; font-size: 12px; border: 1px solid #ccc; padding: 8px; background-color: #f9f9f9;">
+	<div class="form-row">
+		<button [disabled]="!isStartEnabled() || isLoading()" (click)="onStart()">
+			{{ isLoading() ? 'Starting...' : 'Start Enrollment Session' }}
+		</button>
+	</div>
+
+	<div class="error-message" *ngIf="errorMessage() as error" style="color: red; margin: 10px 0; font-weight: bold;">
+		{{ error }}
+	</div>
+
+	<div class="error-details" *ngIf="errorDetails()" style="margin: 10px 0;">
+		<details>
+			<summary style="cursor: pointer; color: #666; font-weight: bold;">Show Error Details</summary>
+			<textarea readonly [value]="errorDetails()"
+				style="width: 100%; height: 200px; margin-top: 10px; font-family: monospace; font-size: 12px; border: 1px solid #ccc; padding: 8px; background-color: #f9f9f9;">
       </textarea>
-    </details>
-  </div>
+		</details>
+	</div>
 
-  <div class="form-row" *ngIf="sessionId() as sid">
-    <div>SessionId: <code>{{ sid }}</code></div>
-  </div>
+	<div class="form-row" *ngIf="sessionId() as sid">
+		<div>SessionId: <code>{{ sid }}</code></div>
+	</div>
 
-  <div class="form-row" *ngIf="isGetStatusEnabled()">
-    <button (click)="onGetStatus()">Get Session Status</button>
-  </div>
+	<div class="form-row" *ngIf="isGetStatusEnabled()">
+		<button (click)="onGetStatus()">Get Session Status</button>
+	</div>
 
-  <div class="status-result" *ngIf="lastStatus() as status">
-    <h3>Session Result:</h3>
-    <pre>{{ status | json }}</pre>
-  </div>
-  
+	<div class="status-result" *ngIf="lastStatus() as status">
+		<h3>Session Result:</h3>
+		<pre>{{ status | json }}</pre>
+	</div>
+
 
 </div>

@@ -1,7 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
-import { BioSessionType } from './services/bio-session.service';
 
 @Component({
 	selector: 'app-root',
@@ -13,7 +12,7 @@ import { BioSessionType } from './services/bio-session.service';
 export class AppComponent {
 	title = 'Bio Sessions';
 
-	sessionTypes: BioSessionType[] = ['Liveness', 'Enrollment', 'Authentication', 'IdentificationDocumentCapture'];
+	sessionTypes: string[] = ['Liveness', 'Enrollment', 'Enrollment2d', 'Authentication', 'IdentificationDocumentCapture'];
 
 	constructor(private router: Router) { }
 
@@ -21,6 +20,7 @@ export class AppComponent {
 		const routeMap: Record<string, string> = {
 			'Liveness': '/liveness',
 			'Enrollment': '/enrollment',
+			'Enrollment2d': '/enrollment-2d',
 			'Authentication': '/authentication',
 			'IdentificationDocumentCapture': '/identification-document-capture'
 		};

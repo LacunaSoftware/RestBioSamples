@@ -4,12 +4,13 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import RestPkiWidget, { BioSessionInterruptedError } from 'lacuna-restpki-widget';
 import { firstValueFrom } from 'rxjs';
-import { BioSessionService, BioSubjectReference, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/bio-session.service';
+import { RestBioService, BioSubjectReference, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/rest-bio.service';
+import { SubjectIdentifierInputComponent } from '../subject-identifier-input/subject-identifier-input.component';
 
 @Component({
 	selector: 'app-authentication',
 	standalone: true,
-	imports: [CommonModule, FormsModule, HttpClientModule],
+	imports: [CommonModule, FormsModule, HttpClientModule, SubjectIdentifierInputComponent],
 	templateUrl: './authentication.component.html',
 	styleUrl: './authentication.component.scss'
 })
@@ -25,7 +26,7 @@ export class AuthenticationComponent {
 	errorMessage = signal<string | null>(null);
 	errorDetails = signal<string | null>(null);
 
-	constructor(private readonly bio: BioSessionService) { }
+	constructor(private readonly bio: RestBioService) { }
 
 	async onStart(): Promise<void> {
 		this.resetStateForNewSession();
@@ -34,8 +35,7 @@ export class AuthenticationComponent {
 		try {
 			// Create bio subject reference for authentication
 			const bioSubjectReference: BioSubjectReference = {
-				identifier: 'user-' + Date.now(), // You should replace this with actual user identifier
-				id: '1234567890'
+				identifier: SubjectIdentifierInputComponent.subjectIdentifier,
 			};
 
 			const res: StartBioSessionResponse = await firstValueFrom(this.bio.startAuthenticationSession(bioSubjectReference));

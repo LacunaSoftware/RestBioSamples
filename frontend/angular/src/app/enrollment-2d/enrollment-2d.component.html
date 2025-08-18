@@ -1,10 +1,14 @@
 <div class="session-content">
-	<h2>Identification Document Capture</h2>
+	<h2>Enrollment 2D</h2>
 
-	<div class="form-row">
-		<button [disabled]="!isStartEnabled() || isLoading()" (click)="onStart()">
-			{{ isLoading() ? 'Starting...' : 'Start ID Document Capture Session' }}
-		</button>
+	<app-subject-identifier-input></app-subject-identifier-input>
+
+	<div class="row">
+		<button [disabled]="isBusy()" class="ms-2" mat-flat-button type="button" color="primary"
+			(click)="doEnrollment2d()">
+			{{ isBusy() ? 'Enrolling...' : 'Choose image' }}
+			<input type="file" #enrollment2dInput hidden (change)="handleEnrollment2dFile($event)" />
+		</button><br>
 	</div>
 
 	<div class="error-message" *ngIf="errorMessage() as error" style="color: red; margin: 10px 0; font-weight: bold;">

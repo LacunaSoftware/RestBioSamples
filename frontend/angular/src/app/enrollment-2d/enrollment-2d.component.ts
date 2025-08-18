@@ -1,19 +1,25 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, signal } from '@angular/core';
+import { Component, ElementRef, signal, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import RestPkiWidget, { BioSessionInterruptedError } from 'lacuna-restpki-widget';
 import { firstValueFrom } from 'rxjs';
 import { RestBioService, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/rest-bio.service';
+import { SubjectIdentifierInputComponent } from "../subject-identifier-input/subject-identifier-input.component";
 
 @Component({
-	selector: 'app-liveness',
+	selector: 'app-enrollment-2d',
 	standalone: true,
-	imports: [CommonModule, FormsModule, HttpClientModule],
-	templateUrl: './liveness.component.html',
-	styleUrl: './liveness.component.scss'
+	imports: [
+		CommonModule,
+		FormsModule,
+		HttpClientModule,
+		SubjectIdentifierInputComponent
+	],
+	templateUrl: './enrollment-2d.component.html',
+	styleUrl: './enrollment-2d.component.scss'
 })
-export class LivenessComponent {
+export class Enrollment2dComponent {
 	// UI state
 	isGetStatusEnabled = signal<boolean>(false);
 
@@ -24,52 +30,66 @@ export class LivenessComponent {
 	errorMessage = signal<string | null>(null);
 	errorDetails = signal<string | null>(null);
 
+	@ViewChild('enrollment2dInput') enrollment2dInput!: ElementRef<HTMLInputElement>;
+
 	constructor(private readonly bio: RestBioService) { }
 
-	async onStart(): Promise<void> {
+	doEnrollment2d(): void {
+		this.enrollment2dInput.nativeElement.click();
+	}
+
+	handleEnrollment2dFile(event: Event): void {
+		const input = event.target as HTMLInputElement;
+
+		if (input.files && input.files.length > 0) {
+			const file = input.files[0];
+			this.convertFileToBase64(file).then(base64 => {
+				this.onStart(base64);
+			});
+		}
+	}
+
+	convertFileToBase64(file: File): Promise<string> {
+		return new Promise((resolve, reject) => {
+			const reader = new FileReader();
+
+			reader.onload = () => {
+				const base64 = (reader.result as string).split(',')[1];
+				resolve(base64);
+			};
+
+			reader.onerror = (error) => reject(error);
+			reader.readAsDataURL(file);
+		});
+	}
+
+	async onStart(image: string): Promise<void> {
 		this.resetStateForNewSession();
 		this.isBusy.set(true);
 
 		try {
-			const res: StartBioSessionResponse = await firstValueFrom(this.bio.startLivenessSession());
-			this.sessionId.set(res.sessionId);
+			const subjectIdentifier = SubjectIdentifierInputComponent.subjectIdentifier;
 
-			// Enable status check
 			this.isGetStatusEnabled.set(false);
 
-			// Automatically perform bio session with widget
-			const widget = new RestPkiWidget();
+			const result = await firstValueFrom(this.bio.enrollment2d(subjectIdentifier, image));
 
-			try {
-				const widgetResult = await widget.performBioSession(res.sessionUrl);
-				const ticket = widgetResult.completeTicket;
+			this.sessionId.set(result.sessionId);
+			this.isGetStatusEnabled.set(true);
 
-				// Automatically complete the session
-				const result: CompleteBioSessionResponse = await firstValueFrom(this.bio.completeLivenessSession(ticket));
-
-				// Session completed automatically
-				if (result.success) {
-					console.log('Session completed', result);
-					this.isGetStatusEnabled.set(true);
-					this.sessionId.set(result.sessionId);
-				} else {
-					console.error('Failed to complete session', result);
-					this.errorMessage.set('Failed to complete liveness session. Please try again.');
-					this.setErrorDetails(result);
-				}
-			} catch (error) {
-				if (error instanceof BioSessionInterruptedError) {
-					console.warn(`Bio session interrupted by user: ${error.message} (${error.reason})`);
-				} else {
-					console.error('Bio session error:', error);
-					this.errorMessage.set('Bio session failed. Please try again.');
-					this.setErrorDetails(error);
-				}
+			// Session completed automatically
+			if (result.success) {
+				console.log('Enrollment session completed', result);
+				this.isGetStatusEnabled.set(true);
+			} else {
+				console.error('Failed to complete enrollment session', result);
+				this.errorMessage.set('Failed to complete enrollment session. Please try again.');
+				this.setErrorDetails(result);
 			}
 
 		} catch (error) {
-			console.error('Failed to start liveness session:', error);
-			this.errorMessage.set('Failed to start liveness session. Please try again.');
+			console.error('Failed enrollment-2d:', error);
+			this.errorMessage.set('Failed to start enrollment. Please try again.');
 			this.setErrorDetails(error);
 		} finally {
 			this.isBusy.set(false);
@@ -81,7 +101,7 @@ export class LivenessComponent {
 		if (!id) return;
 
 		// Placeholder for future status endpoint implementation
-		this.lastStatus.set({ placeholder: true, sessionId: id });
+		this.lastStatus.set({ placeholder: true, sessionId: id, sessionType: 'Enrollment' });
 		this.isGetStatusEnabled.set(false);
 	}
 

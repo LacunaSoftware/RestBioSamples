@@ -4,7 +4,7 @@ import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import RestPkiWidget, { BioSessionInterruptedError } from 'lacuna-restpki-widget';
 import { firstValueFrom } from 'rxjs';
-import { BioSessionService, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/bio-session.service';
+import { RestBioService, CompleteBioSessionResponse, StartBioSessionResponse } from '../services/rest-bio.service';
 
 @Component({
 	selector: 'app-identification-document-capture',
@@ -25,7 +25,7 @@ export class IdentificationDocumentCaptureComponent {
 	errorMessage = signal<string | null>(null);
 	errorDetails = signal<string | null>(null);
 
-	constructor(private readonly bio: BioSessionService) { }
+	constructor(private readonly bio: RestBioService) { }
 
 	async onStart(): Promise<void> {
 		this.resetStateForNewSession();
