@@ -81,6 +81,8 @@ namespace RestBioAspNetCoreSample.Controllers {
             {
                 // The biometric session was successful and the user was enrolled.
 
+                // You may want to store SubjectID to be used later
+                _ = result.SubjectId;
             }
             else if (success == false)
             {
