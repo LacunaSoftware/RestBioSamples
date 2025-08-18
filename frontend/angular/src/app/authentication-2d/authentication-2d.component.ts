@@ -7,7 +7,7 @@ import { RestBioService } from '../services/rest-bio.service';
 import { SubjectIdentifierInputComponent } from "../subject-identifier-input/subject-identifier-input.component";
 
 @Component({
-	selector: 'app-enrollment-2d',
+	selector: 'app-authentication-2d',
 	standalone: true,
 	imports: [
 		CommonModule,
@@ -15,10 +15,10 @@ import { SubjectIdentifierInputComponent } from "../subject-identifier-input/sub
 		HttpClientModule,
 		SubjectIdentifierInputComponent
 	],
-	templateUrl: './enrollment-2d.component.html',
-	styleUrl: './enrollment-2d.component.scss'
+	templateUrl: './authentication-2d.component.html',
+	styleUrl: './authentication-2d.component.scss'
 })
-export class Enrollment2dComponent {
+export class Authentication2dComponent {
 	// UI state
 	isGetStatusEnabled = signal<boolean>(false);
 
@@ -29,15 +29,15 @@ export class Enrollment2dComponent {
 	errorMessage = signal<string | null>(null);
 	errorDetails = signal<string | null>(null);
 
-	@ViewChild('enrollment2dInput') enrollment2dInput!: ElementRef<HTMLInputElement>;
+	@ViewChild('authentication2dInput') authentication2dInput!: ElementRef<HTMLInputElement>;
 
 	constructor(private readonly bio: RestBioService) { }
 
-	doEnrollment2d(): void {
-		this.enrollment2dInput.nativeElement.click();
+	doAuthentication2d(): void {
+		this.authentication2dInput.nativeElement.click();
 	}
 
-	handleEnrollment2dFile(event: Event): void {
+	handleAuthentication2dFile(event: Event): void {
 		const input = event.target as HTMLInputElement;
 
 		if (input.files && input.files.length > 0) {
@@ -71,24 +71,24 @@ export class Enrollment2dComponent {
 
 			this.isGetStatusEnabled.set(false);
 
-			const result = await firstValueFrom(this.bio.enrollment2d(subjectIdentifier, image));
+			const result = await firstValueFrom(this.bio.authentication2d(subjectIdentifier, image));
 
 			this.sessionId.set(result.sessionId);
 			this.isGetStatusEnabled.set(true);
 
 			// Session completed automatically
 			if (result.success) {
-				console.log('Enrollment session completed', result);
+				console.log('Authentication session completed', result);
 				this.isGetStatusEnabled.set(true);
 			} else {
-				console.error('Failed to complete enrollment session', result);
-				this.errorMessage.set('Failed to complete enrollment session. Please try again.');
+				console.error('Failed to complete authentication session', result);
+				this.errorMessage.set('Failed to complete authentication session. Please try again.');
 				this.setErrorDetails(result);
 			}
 
 		} catch (error) {
-			console.error('Failed enrollment-2d:', error);
-			this.errorMessage.set('Failed to start enrollment. Please try again.');
+			console.error('Failed authentication-2d:', error);
+			this.errorMessage.set('Failed to start authentication. Please try again.');
 			this.setErrorDetails(error);
 		} finally {
 			this.isBusy.set(false);
@@ -100,7 +100,7 @@ export class Enrollment2dComponent {
 		if (!id) return;
 
 		// Placeholder for future status endpoint implementation
-		this.lastStatus.set({ placeholder: true, sessionId: id, sessionType: 'Enrollment2d' });
+		this.lastStatus.set({ placeholder: true, sessionId: id, sessionType: 'Authentication2d' });
 		this.isGetStatusEnabled.set(false);
 	}
 

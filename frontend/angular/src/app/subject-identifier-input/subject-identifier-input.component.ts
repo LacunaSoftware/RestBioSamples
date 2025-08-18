@@ -17,7 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 	templateUrl: './subject-identifier-input.component.html',
 	styleUrl: './subject-identifier-input.component.scss'
 })
-export class SubjectIdentifierInputComponent implements OnInit {
+export class SubjectIdentifierInputComponent {
 
 	public static subjectIdentifier = "bio-sample-subject";
 
@@ -27,10 +27,6 @@ export class SubjectIdentifierInputComponent implements OnInit {
 
 	set subjectIdentifier(value: string) {
 		SubjectIdentifierInputComponent.subjectIdentifier = value;
-	}
-
-	ngOnInit(): void {
-		console.log("IT works!!!");
 	}
 
 }

@@ -35,12 +35,25 @@ export interface BioSubjectEnrollment2dRequest {
 	faceImage?: BlobModel;
 }
 
+export interface BioSubjectAuthentication2dRequest {
+	faceImage?: BlobModel;
+	subject: {
+		identifier?: string;
+		id?: string;
+	};
+}
+
 export interface BioSubjectEnrollment2dResponse {
 	sessionId: string;
 	success: boolean;
 	result?: {
 		subjectId: string;
 	};
+}
+
+export interface BioSubjectAuthentication2dResponse {
+	sessionId: string;
+	success: boolean;
 }
 
 // TODO: Rename to RestBioService
@@ -102,6 +115,19 @@ export class RestBioService {
 			}
 		};
 		return this.http.post<BioSubjectEnrollment2dResponse>(`/api/bio/enrollment-2d`, body);
+	}
+
+	authentication2d(subjectIdentifier: string, image: string): Observable<BioSubjectAuthentication2dResponse> {
+		const body: BioSubjectAuthentication2dRequest = {
+			subject: {
+				identifier: subjectIdentifier,
+			},
+			faceImage: {
+				content: image,
+				contentType: "image/jpeg" // TODO: make changeable
+			}
+		};
+		return this.http.post<BioSubjectAuthentication2dResponse>(`/api/bio/authentication-2d`, body);
 	}
 
 	getAuthenticationSessionStatus(sessionId: string): Observable<any> {

@@ -1,5 +1,6 @@
 using Lacuna.RestPki.Api.Bio;
 using Lacuna.RestPki.Api.Bio.Sessions;
+using Lacuna.RestPki.Api.Bio.Subjects;
 using Lacuna.RestPki.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -112,5 +113,12 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-	}
+        [HttpPost("/api/bio/authentication-2d")]
+        public Task<BioSubjectAuthentication2dResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request)
+        {
+            // Optionally you can opt to always check Liveness2d
+            request.CheckLiveness2d = true;
+            return restBioService.AuthenticateSubject2dAsync(request);
+        }
+    }
 }
