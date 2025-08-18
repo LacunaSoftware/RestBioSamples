@@ -8,7 +8,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
 	[Route("/api/bio/session")]
-	public class BioSessionController(
+	public class LivenessController(
 
 		IRestBioService restBioService,
 		IOptions<ExampleConfig> exampleConfig

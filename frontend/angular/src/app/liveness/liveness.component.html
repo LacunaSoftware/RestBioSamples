@@ -26,7 +26,6 @@
 
   <div class="form-row" *ngIf="sessionId() as sid">
     <div>SessionId: <code>{{ sid }}</code></div>
-    <div *ngIf="sessionUrl() as url">SessionUrl: <a [href]="url" target="_blank">open</a></div>
   </div>
 
   <div class="form-row" *ngIf="isGetStatusEnabled()">

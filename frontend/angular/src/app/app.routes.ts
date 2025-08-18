@@ -5,9 +5,9 @@ import { IdentificationDocumentCaptureComponent } from './identification-documen
 import { LivenessComponent } from './liveness/liveness.component';
 
 export const routes: Routes = [
-  { path: '', redirectTo: '/liveness', pathMatch: 'full' },
-  { path: 'liveness', component: LivenessComponent },
-  { path: 'enrollment', component: EnrollmentComponent },
-  { path: 'authentication', component: AuthenticationComponent },
-  { path: 'identification-document-capture', component: IdentificationDocumentCaptureComponent }
+	{ path: '', redirectTo: '/liveness', pathMatch: 'full' },
+	{ path: 'liveness', component: LivenessComponent },
+	{ path: 'enrollment', component: EnrollmentComponent },
+	{ path: 'authentication', component: AuthenticationComponent },
+	{ path: 'identification-document-capture', component: IdentificationDocumentCaptureComponent }
 ];

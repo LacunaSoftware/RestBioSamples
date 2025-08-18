@@ -16,8 +16,11 @@ namespace RestBioAspNetCoreSample.Controllers {
 	) : ControllerBase {
 
 		[HttpPost("enrollment")]
-		public async Task<StartBioSessionResponse> StartEnrollmentSessionAsync([FromQuery] string subjectIdentifier, [FromQuery] bool? captureIdentificationDocument = false, 
-			[FromQuery] bool? dangerousOverrideIfAlreadyEnrolled = false) {
+		public async Task<StartBioSessionResponse> StartEnrollmentSessionAsync(
+			[FromQuery] string subjectIdentifier,
+			[FromQuery] bool? captureIdentificationDocument = false, 
+			[FromQuery] bool? dangerousOverrideIfAlreadyEnrolled = false
+		) {
 
 			// This is an example of how to start an enrollment session.
 			// You must implement your own security measures to ensure that only users
