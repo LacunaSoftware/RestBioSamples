@@ -28,7 +28,7 @@ export class Authentication2dComponent {
 	sessionId = signal<string | null>(null);
 	lastStatus = signal<unknown | null>(null);
 	isBusy: boolean = false;
-	errorMessage = signal<string | null>(null);
+	errorMessage?: string;
 	errorDetails = signal<string | null>(null);
 
 	@ViewChild('authentication2dInput') authentication2dInput!: ElementRef<HTMLInputElement>;
@@ -84,13 +84,13 @@ export class Authentication2dComponent {
 				this.isGetStatusEnabled.set(true);
 			} else {
 				console.error('Failed to complete authentication session', result);
-				this.errorMessage.set('Failed to complete authentication session. Please try again.');
+				this.errorMessage = 'Failed to complete authentication session. Please try again.';
 				this.setErrorDetails(result);
 			}
 
 		} catch (error) {
 			console.error('Failed authentication-2d:', error);
-			this.errorMessage.set('Failed to start authentication. Please try again.');
+			this.errorMessage = 'Failed to start authentication. Please try again.';
 			this.setErrorDetails(error);
 		} finally {
 			this.isBusy = false;
@@ -110,7 +110,7 @@ export class Authentication2dComponent {
 		this.isGetStatusEnabled.set(false);
 		this.sessionId.set(null);
 		this.lastStatus.set(null);
-		this.errorMessage.set(null);
+		delete this.errorMessage;
 		this.errorDetails.set(null);
 	}
 

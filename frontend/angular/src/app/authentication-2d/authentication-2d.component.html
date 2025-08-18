@@ -11,8 +11,8 @@
 		</button>
 	</div>
 
-	<div class="error-message" *ngIf="errorMessage() as error" style="color: red; margin: 10px 0; font-weight: bold;">
-		{{ error }}
+	<div class="error-message" *ngIf="errorMessage" style="color: red; margin: 10px 0; font-weight: bold;">
+		{{ errorMessage }}
 	</div>
 
 	<div class="error-details" *ngIf="errorDetails()" style="margin: 10px 0;">
