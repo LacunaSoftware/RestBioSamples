@@ -3,12 +3,12 @@
 
 	<app-subject-identifier-input></app-subject-identifier-input>
 
-	<div class="row">
-		<button [disabled]="isBusy()" class="ms-2" mat-flat-button type="button" color="primary"
+	<div class="row mx-1">
+		<button [disabled]="isBusy" mat-flat-button type="button" color="primary"
 			(click)="doAuthentication2d()">
-			{{ isBusy() ? 'Authenticating...' : 'Choose image' }}
+			{{ isBusy ? 'Authenticating...' : 'Choose image' }}
 			<input type="file" #authentication2dInput hidden (change)="handleAuthentication2dFile($event)" />
-		</button><br>
+		</button>
 	</div>
 
 	<div class="error-message" *ngIf="errorMessage() as error" style="color: red; margin: 10px 0; font-weight: bold;">

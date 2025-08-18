@@ -56,7 +56,6 @@ export interface BioSubjectAuthentication2dResponse {
 	success: boolean;
 }
 
-// TODO: Rename to RestBioService
 @Injectable({ providedIn: 'root' })
 export class RestBioService {
 	private readonly http = inject(HttpClient);

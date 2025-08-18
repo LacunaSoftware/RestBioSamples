@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import { RestBioService } from '../services/rest-bio.service';
 import { SubjectIdentifierInputComponent } from "../subject-identifier-input/subject-identifier-input.component";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
 	selector: 'app-authentication-2d',
@@ -13,7 +14,8 @@ import { SubjectIdentifierInputComponent } from "../subject-identifier-input/sub
 		CommonModule,
 		FormsModule,
 		HttpClientModule,
-		SubjectIdentifierInputComponent
+		SubjectIdentifierInputComponent,
+		MatButtonModule
 	],
 	templateUrl: './authentication-2d.component.html',
 	styleUrl: './authentication-2d.component.scss'
@@ -25,7 +27,7 @@ export class Authentication2dComponent {
 	// Session data
 	sessionId = signal<string | null>(null);
 	lastStatus = signal<unknown | null>(null);
-	isBusy = signal<boolean>(false);
+	isBusy: boolean = false;
 	errorMessage = signal<string | null>(null);
 	errorDetails = signal<string | null>(null);
 
@@ -64,7 +66,7 @@ export class Authentication2dComponent {
 
 	async onStart(image: string): Promise<void> {
 		this.resetStateForNewSession();
-		this.isBusy.set(true);
+		this.isBusy = true;
 
 		try {
 			const subjectIdentifier = SubjectIdentifierInputComponent.subjectIdentifier;
@@ -91,7 +93,7 @@ export class Authentication2dComponent {
 			this.errorMessage.set('Failed to start authentication. Please try again.');
 			this.setErrorDetails(error);
 		} finally {
-			this.isBusy.set(false);
+			this.isBusy = false;
 		}
 	}
 
