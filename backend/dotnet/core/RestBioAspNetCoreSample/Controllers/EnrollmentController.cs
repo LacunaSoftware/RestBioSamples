@@ -81,35 +81,6 @@ namespace RestBioAspNetCoreSample.Controllers {
             {
                 // The biometric session was successful and the user was enrolled.
 
-                if (result.ResultDataAvailable)
-                {
-                    // When the session has ResultDataAvailable = true, it means that
-                    // you can now retrieve the images captured during the session.
-
-                    var resultData = await restBioService.GetSessionResultDataAsync(sessionId);
-
-                    // Available properties of the resultData:
-                    _ = resultData.FaceData?.FaceImage.Content;             // The image of the user's face captured during the enrollment
-                    _ = resultData.FaceData?.FaceImage.ContentType;         // The content type of the face image (e.g. "image/jpeg")
-
-                    _ = resultData.DocumentData?.FrontImage.Content;        // The image of the front side of the ID document captured during the session
-                    _ = resultData.DocumentData?.FrontImage.ContentType;    // The content type of the front side image (e.g. "image/jpeg")
-
-                    _ = resultData.DocumentData?.FaceCropImage?.Content;    // The cropped image of the face on the ID document captured during the session.
-                    _ = resultData.DocumentData?.FaceCropImage?.ContentType;// The content type of the cropped face image (e.g. "image/jpeg")
-
-                    _ = resultData.DocumentData?.BackImage?.Content;        // The image of the back side of the ID document captured during the session (may be null)
-                    _ = resultData.DocumentData?.BackImage?.ContentType;    // The content type of the back side image (e.g. "image/jpeg") (may be null)
-                }
-
-                // For enrollment sessions, the enrolled subject information might be available:
-                // Note: The exact property name may be different, check the actual model structure
-                // if (result.Subject != null) {
-                //     _ = result.Subject.Id;                   // The unique ID of the enrolled subject
-                //     _ = result.Subject.Identifier;           // The identifier of the enrolled subject (if provided)
-                //     _ = result.Subject.CreatedOn;            // When the subject was enrolled
-                // }
-
             }
             else if (success == false)
             {
