@@ -85,7 +85,7 @@ export class RestBioService {
 	}
 
 	getEnrollmentSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/enrollment/${encodeURIComponent(sessionId)}/status`);
+		return this.http.get(`/api/bio/session/enrollment/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeEnrollmentSession(ticket: string): Observable<CompleteBioSessionResponse> {
@@ -130,7 +130,7 @@ export class RestBioService {
 	}
 
 	getAuthenticationSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/authentication/${encodeURIComponent(sessionId)}/status`);
+		return this.http.get(`/api/bio/session/authentication/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeAuthenticationSession(ticket: string): Observable<CompleteBioSessionResponse> {
@@ -144,7 +144,11 @@ export class RestBioService {
 	}
 
 	getIdentificationDocumentCaptureStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/id-capture/${encodeURIComponent(sessionId)}/status`);
+		return this.http.get(`/api/bio/session/id-capture/status?sessionId=${encodeURIComponent(sessionId)}`);
+	}
+
+	getLivenessSessionStatus(sessionId: string): Observable<any> {
+		return this.http.get(`/api/bio/session/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeIdentificationDocumentCaptureSession(ticket: string): Observable<CompleteBioSessionResponse> {

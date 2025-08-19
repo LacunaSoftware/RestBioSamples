@@ -106,5 +106,10 @@ namespace RestBioAspNetCoreSample.Controllers {
             request.CheckLiveness2d = true;
             return restBioService.EnrollSubject2dAsync(request);
         }
+
+        [HttpGet("enrollment/status")]
+        public async Task<BioSessionResultDataModel> GetSessionStatus(string sessionId) {
+            return await restBioService.GetSessionResultDataAsync(Guid.Parse(sessionId));
+        }
     }
 }

@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
 import { firstValueFrom } from 'rxjs';
+import { ErrorDisplayComponent } from '../error-display/error-display.component';
 import { RestBioService } from '../services/rest-bio.service';
 import { SubjectIdentifierInputComponent } from "../subject-identifier-input/subject-identifier-input.component";
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
 	selector: 'app-authentication-2d',
@@ -15,23 +16,20 @@ import { MatButtonModule } from '@angular/material/button';
 		FormsModule,
 		HttpClientModule,
 		SubjectIdentifierInputComponent,
-		MatButtonModule
+		MatButtonModule,
+		ErrorDisplayComponent
 	],
 	templateUrl: './authentication-2d.component.html',
 	styleUrl: './authentication-2d.component.scss'
 })
 export class Authentication2dComponent {
-	// UI state
-	isGetStatusEnabled = signal<boolean>(false);
-
 	// Session data
-	sessionId = signal<string | null>(null);
-	lastStatus = signal<unknown | null>(null);
-	isBusy: boolean = false;
-	errorMessage?: string;
-	errorDetails = signal<string | null>(null);
+	sessionId: string | null = null;
+	lastStatus: unknown | null = null;
+	isLoading: boolean = false;
 
 	@ViewChild('authentication2dInput') authentication2dInput!: ElementRef<HTMLInputElement>;
+	@ViewChild(ErrorDisplayComponent) errorDisplay!: ErrorDisplayComponent;
 
 	constructor(private readonly bio: RestBioService) { }
 
@@ -66,85 +64,53 @@ export class Authentication2dComponent {
 
 	async onStart(image: string): Promise<void> {
 		this.resetStateForNewSession();
-		this.isBusy = true;
+		this.isLoading = true;
 
 		try {
 			const subjectIdentifier = SubjectIdentifierInputComponent.subjectIdentifier;
 
-			this.isGetStatusEnabled.set(false);
+
 
 			const result = await firstValueFrom(this.bio.authentication2d(subjectIdentifier, image));
 
-			this.sessionId.set(result.sessionId);
-			this.isGetStatusEnabled.set(true);
+			this.sessionId = result.sessionId;
 
 			// Session completed automatically
 			if (result.success) {
 				console.log('Authentication session completed', result);
-				this.isGetStatusEnabled.set(true);
+				
+				this.sessionId = result.sessionId;
+				
+				// Get session status after successful completion
+				try {
+					const statusResult = await firstValueFrom(this.bio.getAuthenticationSessionStatus(result.sessionId));
+					this.lastStatus = statusResult;
+					console.log('Authentication 2D session status:', statusResult);
+				} catch (statusError) {
+					console.error('Failed to get session status:', statusError);
+				}
 			} else {
 				console.error('Failed to complete authentication session', result);
-				this.errorMessage = 'Failed to complete authentication session. Please try again.';
-				this.setErrorDetails(result);
+				this.errorDisplay.errorMessage = 'Failed to complete authentication session. Please try again.';
+				this.errorDisplay.setErrorDetails(result);
 			}
 
 		} catch (error) {
 			console.error('Failed authentication-2d:', error);
-			this.errorMessage = 'Failed to start authentication. Please try again.';
-			this.setErrorDetails(error);
+			this.errorDisplay.errorMessage = 'Failed to start authentication. Please try again.';
+			this.errorDisplay.setErrorDetails(error);
 		} finally {
-			this.isBusy = false;
+			this.isLoading = false;
 		}
 	}
 
-	onGetStatus(): void {
-		const id = this.sessionId();
-		if (!id) return;
 
-		// Placeholder for future status endpoint implementation
-		this.lastStatus.set({ placeholder: true, sessionId: id, sessionType: 'Authentication2d' });
-		this.isGetStatusEnabled.set(false);
-	}
 
 	private resetStateForNewSession(): void {
-		this.isGetStatusEnabled.set(false);
-		this.sessionId.set(null);
-		this.lastStatus.set(null);
-		delete this.errorMessage;
-		this.errorDetails.set(null);
+		this.sessionId = null;
+		this.lastStatus = null;
+		this.errorDisplay?.clearErrors();
 	}
 
-	private setErrorDetails(error: any): void {
-		let details = '';
 
-		if (error) {
-			// Handle HTTP error responses
-			if (error.error) {
-				details += `Error: ${JSON.stringify(error.error, null, 2)}\n`;
-			}
-
-			// Handle standard error properties
-			if (error.message) {
-				details += `Message: ${error.message}\n`;
-			}
-
-			if (error.stack) {
-				details += `Stack: ${error.stack}\n`;
-			}
-
-			// Handle inner exceptions or nested errors
-			if (error.innerException) {
-				details += `Inner Exception: ${JSON.stringify(error.innerException, null, 2)}\n`;
-			}
-
-			// For any other properties
-			if (typeof error === 'object') {
-				details += `Full Error: ${JSON.stringify(error, null, 2)}`;
-			} else {
-				details += `Error: ${error}`;
-			}
-		}
-
-		this.errorDetails.set(details || 'No additional error details available.');
-	}
 }

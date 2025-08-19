@@ -12,28 +12,6 @@
 		margin: 0.9rem 0;
 	}
 
-	button {
-		padding: 0.6rem 1rem;
-		border: 1px solid transparent;
-		border-radius: 8px;
-		background: #4f46e5;
-		color: #fff;
-		transition: filter 0.15s ease, transform 0.02s ease;
-		cursor: pointer;
-	}
-
-	button:hover:not([disabled]) {
-		filter: brightness(1.03);
-	}
-
-	button:active:not([disabled]) {
-		transform: translateY(1px);
-	}
-
-	button[disabled] {
-		opacity: 0.5;
-		cursor: not-allowed;
-	}
 
 	.status-result {
 		margin-top: 1.5rem;
