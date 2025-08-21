@@ -60,7 +60,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			var result = await restBioService.CompleteLivenessSessionAsync(request.Ticket);
 
 			// Avaliable properties of the result:
-			var sessionId = result.SessionId;		// The ID of the session.
+			var sessionId = result.SessionId;       // The ID of the session.
 			_ = result.FaceLivenessStatus.AttemptCount; // The number of face liveness attempts the user made.
 			_ = result.FaceLivenessStatus.Success;      // Whether the user passed the face liveness test or not.
 
@@ -83,14 +83,14 @@ namespace RestBioAspNetCoreSample.Controllers {
 					var resultData = await restBioService.GetSessionResultDataAsync(sessionId);
 
 					// Avaliable properties of the resultData:
-					_ = resultData.FaceData?.FaceImage.Content;				// The image of the user's face captured during the liveness test
-					_ = resultData.FaceData?.FaceImage.ContentType;			// The content type of the face image (e.g. "image/jpeg")
+					_ = resultData.FaceData?.FaceImage.Content;             // The image of the user's face captured during the liveness test
+					_ = resultData.FaceData?.FaceImage.ContentType;         // The content type of the face image (e.g. "image/jpeg")
 
-					_ = resultData.DocumentData?.FrontImage.Content;		// The image of the front side of the ID document captured during the session
+					_ = resultData.DocumentData?.FrontImage.Content;        // The image of the front side of the ID document captured during the session
 					_ = resultData.DocumentData?.FrontImage.ContentType;    // The content type of the front side image (e.g. "image/jpeg")
 
 
-					_ = resultData.DocumentData?.FaceCropImage?.Content;	// The cropped image of the face on the ID document captured during the session.
+					_ = resultData.DocumentData?.FaceCropImage?.Content;    // The cropped image of the face on the ID document captured during the session.
 					_ = resultData.DocumentData?.FaceCropImage?.ContentType;// The content type of the cropped face image (e.g. "image/jpeg")
 
 					_ = resultData.DocumentData?.BackImage?.Content;        // The image of the back side of the ID document captured during the session (may be null)

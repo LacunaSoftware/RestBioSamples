@@ -61,12 +61,12 @@ namespace RestBioAspNetCoreSample.Controllers {
 			var result = await restBioService.CompleteAuthenticationSessionAsync(request.Ticket);
 
 			// Available properties of the result:
-			var sessionId = result.SessionId;		// The ID of the session.
-			
+			var sessionId = result.SessionId;       // The ID of the session.
+
 			// Authentication-specific properties (the exact properties may vary based on the actual model structure):
 			// Note: The properties below are based on the liveness model and may need adjustment for authentication
 			// You should verify the actual properties available in BioAuthenticationSessionStatusModel
-			
+
 			var success = result.Success;           // Whether the biometric session was successful or not.
 
 			if (success == true) {
@@ -85,17 +85,16 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-        [HttpPost("/api/bio/authentication-2d")]
-        public Task<BioSubjectAuthentication2dResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request)
-        {
-            // Optionally you can opt to always check Liveness2d
-            request.CheckLiveness2d = true;
-            return restBioService.AuthenticateSubject2dAsync(request);
-        }
+		[HttpPost("/api/bio/authentication-2d")]
+		public Task<BioSubjectAuthentication2dResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request) {
+			// Optionally you can opt to check Liveness2d
+			request.CheckLiveness2d = true;
+			return restBioService.AuthenticateSubject2dAsync(request);
+		}
 
-        [HttpGet("authentication/status")]
-        public async Task<BioSessionResultDataModel> GetSessionStatus(string sessionId) {
-            return await restBioService.GetSessionResultDataAsync(Guid.Parse(sessionId));
-        }
-    }
+		[HttpGet("authentication/status")]
+		public async Task<BioSessionResultDataModel> GetSessionStatus(string sessionId) {
+			return await restBioService.GetSessionResultDataAsync(Guid.Parse(sessionId));
+		}
+	}
 }

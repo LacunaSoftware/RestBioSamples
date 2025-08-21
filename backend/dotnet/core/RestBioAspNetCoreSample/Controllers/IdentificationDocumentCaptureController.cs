@@ -61,12 +61,12 @@ namespace RestBioAspNetCoreSample.Controllers {
 			var result = await restBioService.CompleteIdentificationDocumentCaptureSessionAsync(request.Ticket);
 
 			// Available properties of the result:
-			var sessionId = result.SessionId;		// The ID of the session.
+			var sessionId = result.SessionId;       // The ID of the session.
 
 			// ID document capture specific properties (the exact properties may vary based on the actual model structure):
 			// Note: The properties below are based on the liveness model and may need adjustment for ID capture
 			// You should verify the actual properties available in IdentificationDocumentCaptureSessionStatusModel
-			
+
 			var success = result.Success;           // Whether the biometric session was successful or not.
 
 			if (success == true) {
@@ -85,10 +85,10 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-        [HttpGet("id-capture/status")]
-        public async Task<BioSessionResultDataModel> GetSessionStatus(string sessionId) {
-            return await restBioService.GetSessionResultDataAsync(Guid.Parse(sessionId));
-        }
+		[HttpGet("id-capture/status")]
+		public async Task<BioSessionResultDataModel> GetSessionStatus(string sessionId) {
+			return await restBioService.GetSessionResultDataAsync(Guid.Parse(sessionId));
+		}
 
-    }
+	}
 }
