@@ -16,8 +16,6 @@ import { CompleteBioSessionResponse, RestBioService, StartBioSessionResponse } f
 	styleUrl: './identification-document-capture.component.scss'
 })
 export class IdentificationDocumentCaptureComponent {
-	// UI state
-	
 
 	// Session data
 	sessionId: string | null = null;
@@ -53,7 +51,7 @@ export class IdentificationDocumentCaptureComponent {
 					console.log('ID Document Capture session completed', result);
 
 					this.sessionId = result.sessionId;
-					
+
 					// Get session status after successful completion
 					try {
 						const statusResult = await firstValueFrom(this.bio.getIdentificationDocumentCaptureStatus(result.sessionId));
@@ -70,11 +68,11 @@ export class IdentificationDocumentCaptureComponent {
 			} catch (error) {
 				if (error instanceof BioSessionInterruptedError) {
 					console.warn(`Bio session interrupted by user: ${error.message} (${error.reason})`);
-							} else {
-				console.error('Bio session error:', error);
-				this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
-				this.errorDisplay.setErrorDetails(error);
-			}
+				} else {
+					console.error('Bio session error:', error);
+					this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
+					this.errorDisplay.setErrorDetails(error);
+				}
 			}
 
 		} catch (error) {
@@ -86,13 +84,9 @@ export class IdentificationDocumentCaptureComponent {
 		}
 	}
 
-
-
 	private resetStateForNewSession(): void {
 		this.sessionId = null;
 		this.lastStatus = null;
 		this.errorDisplay?.clearErrors();
 	}
-
-
 }

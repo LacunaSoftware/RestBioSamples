@@ -16,8 +16,6 @@ import { CompleteBioSessionResponse, RestBioService, StartBioSessionResponse } f
 	styleUrl: './liveness.component.scss'
 })
 export class LivenessComponent {
-	// UI state
-	
 
 	// Session data
 	sessionId: string | null = null;
@@ -51,9 +49,9 @@ export class LivenessComponent {
 				// Session completed automatically
 				if (result.success) {
 					console.log('Session completed', result);
-					
+
 					this.sessionId = result.sessionId;
-					
+
 					// Get session status after successful completion
 					try {
 						const statusResult = await firstValueFrom(this.bio.getLivenessSessionStatus(result.sessionId));
@@ -76,7 +74,7 @@ export class LivenessComponent {
 					console.error('Bio session error:', error);
 					this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
 					this.errorDisplay.setErrorDetails(error);
-			}
+				}
 			}
 
 		} catch (error) {

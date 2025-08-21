@@ -110,7 +110,7 @@ export class RestBioService {
 		const body: BioSubjectEnrollment2dRequest = {
 			subjectIdentifier, faceImage: {
 				content: image,
-				contentType: "image/jpeg" // TODO: make changeable
+				contentType: "image/jpeg" // TODO: you must implement the correct file upload type
 			}
 		};
 		return this.http.post<BioSubjectEnrollment2dResponse>(`/api/bio/enrollment-2d`, body);
@@ -123,7 +123,7 @@ export class RestBioService {
 			},
 			faceImage: {
 				content: image,
-				contentType: "image/jpeg" // TODO: make changeable
+				contentType: "image/jpeg" // TODO: you must implement the correct file upload type
 			}
 		};
 		return this.http.post<BioSubjectAuthentication2dResponse>(`/api/bio/authentication-2d`, body);

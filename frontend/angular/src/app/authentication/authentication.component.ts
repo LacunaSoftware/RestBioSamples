@@ -17,8 +17,6 @@ import { SubjectIdentifierInputComponent } from '../subject-identifier-input/sub
 	styleUrl: './authentication.component.scss'
 })
 export class AuthenticationComponent {
-	// UI state
-	
 
 	// Session data
 	sessionId: string | null = null;
@@ -42,8 +40,6 @@ export class AuthenticationComponent {
 			const res: StartBioSessionResponse = await firstValueFrom(this.bio.startAuthenticationSession(bioSubjectReference));
 			this.sessionId = res.sessionId;
 
-
-
 			// Automatically perform bio session with widget
 			const widget = new RestPkiWidget();
 
@@ -59,7 +55,7 @@ export class AuthenticationComponent {
 					console.log('Authentication session completed', result);
 
 					this.sessionId = result.sessionId;
-					
+
 					// Get session status after successful completion
 					try {
 						const statusResult = await firstValueFrom(this.bio.getAuthenticationSessionStatus(result.sessionId));
@@ -76,11 +72,11 @@ export class AuthenticationComponent {
 			} catch (error) {
 				if (error instanceof BioSessionInterruptedError) {
 					console.warn(`Bio session interrupted by user: ${error.message} (${error.reason})`);
-							} else {
-				console.error('Bio session error:', error);
-				this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
-				this.errorDisplay.setErrorDetails(error);
-			}
+				} else {
+					console.error('Bio session error:', error);
+					this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
+					this.errorDisplay.setErrorDetails(error);
+				}
 			}
 
 		} catch (error) {
@@ -92,13 +88,9 @@ export class AuthenticationComponent {
 		}
 	}
 
-
-
 	private resetStateForNewSession(): void {
 		this.sessionId = null;
 		this.lastStatus = null;
 		this.errorDisplay?.clearErrors();
 	}
-
-
 }

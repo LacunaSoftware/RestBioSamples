@@ -21,9 +21,7 @@ import { SubjectIdentifierInputComponent } from "../subject-identifier-input/sub
 	styleUrl: './enrollment-2d.component.scss'
 })
 export class Enrollment2dComponent {
-	// UI state
 	
-
 	// Session data
 	sessionId: string | null = null;
 	lastStatus: unknown | null = null;

@@ -17,9 +17,7 @@ import { SubjectIdentifierInputComponent } from '../subject-identifier-input/sub
 	styleUrl: './enrollment.component.scss'
 })
 export class EnrollmentComponent {
-	// UI state
 	
-
 	// Session data
 	sessionId: string | null = null;
 	lastStatus: unknown | null = null;
@@ -56,7 +54,7 @@ export class EnrollmentComponent {
 					console.log('Enrollment session completed', result);
 
 					this.sessionId = result.sessionId;
-					
+
 					// Get session status after successful completion
 					try {
 						const statusResult = await firstValueFrom(this.bio.getEnrollmentSessionStatus(result.sessionId));
@@ -74,9 +72,9 @@ export class EnrollmentComponent {
 				if (error instanceof BioSessionInterruptedError) {
 					console.warn(`Bio session interrupted by user: ${error.message} (${error.reason})`);
 				} else {
-				console.error('Bio session error:', error);
-				this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
-				this.errorDisplay.setErrorDetails(error);
+					console.error('Bio session error:', error);
+					this.errorDisplay.errorMessage = 'Bio session failed. Please try again.';
+					this.errorDisplay.setErrorDetails(error);
 				}
 			}
 
@@ -89,13 +87,9 @@ export class EnrollmentComponent {
 		}
 	}
 
-
-
 	private resetStateForNewSession(): void {
 		this.sessionId = null;
 		this.lastStatus = null;
 		this.errorDisplay?.clearErrors();
 	}
-
-
 }

@@ -23,6 +23,7 @@ import { SubjectIdentifierInputComponent } from "../subject-identifier-input/sub
 	styleUrl: './authentication-2d.component.scss'
 })
 export class Authentication2dComponent {
+	
 	// Session data
 	sessionId: string | null = null;
 	lastStatus: unknown | null = null;
@@ -78,9 +79,9 @@ export class Authentication2dComponent {
 			// Session completed automatically
 			if (result.success) {
 				console.log('Authentication session completed', result);
-				
+
 				this.sessionId = result.sessionId;
-				
+
 				// Get session status after successful completion
 				try {
 					const statusResult = await firstValueFrom(this.bio.getAuthenticationSessionStatus(result.sessionId));
@@ -104,13 +105,9 @@ export class Authentication2dComponent {
 		}
 	}
 
-
-
 	private resetStateForNewSession(): void {
 		this.sessionId = null;
 		this.lastStatus = null;
 		this.errorDisplay?.clearErrors();
 	}
-
-
 }
