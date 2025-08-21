@@ -1,3 +1,4 @@
+using Lacuna.RestPki.Api;
 using Lacuna.RestPki.Api.Bio.Sessions;
 using Lacuna.RestPki.Api.Bio.Subjects;
 using Lacuna.RestPki.Client;
@@ -94,10 +95,27 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("/api/bio/enrollment-2d")]
-		public Task<BioSubjectEnrollment2dResponse> EnrollSubject2dAsync(BioSubjectEnrollment2dRequest request) {
+		public async Task<BioSubjectEnrollment2dResponse> EnrollSubject2dAsync(BioSubjectEnrollment2dRequest request) {
 			// Optionally you can opt to check Liveness2d
 			request.CheckLiveness2d = true;
-			return restBioService.EnrollSubject2dAsync(request);
+			var response = await restBioService.EnrollSubject2dAsync(request);
+
+			if (response.Success) {
+				_ = response.Result.SubjectId;
+			} else {
+				// Here you can see why the enrollment has Failed
+				_ = response.Failure;
+
+				if (response.Failure == BioEnrollmentFailures.FaceLiveness2dFailed) {
+					// Liveness failed
+				}
+
+				if (response.Failure == BioEnrollmentFailures.FaceNotFoundWithSufficientQuality) {
+					// Bad image
+				}
+			}
+
+			return response;
 		}
 
 		[HttpGet("enrollment/status")]

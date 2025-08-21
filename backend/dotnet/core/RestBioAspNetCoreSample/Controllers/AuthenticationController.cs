@@ -1,3 +1,4 @@
+using Lacuna.RestPki.Api;
 using Lacuna.RestPki.Api.Bio;
 using Lacuna.RestPki.Api.Bio.Sessions;
 using Lacuna.RestPki.Api.Bio.Subjects;
@@ -86,10 +87,22 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("/api/bio/authentication-2d")]
-		public Task<BioSubjectAuthentication2dResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request) {
+		public async Task<BioSubjectAuthentication2dResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request) {
 			// Optionally you can opt to check Liveness2d
 			request.CheckLiveness2d = true;
-			return restBioService.AuthenticateSubject2dAsync(request);
+			var response = await restBioService.AuthenticateSubject2dAsync(request);
+
+			if (response.Success) {
+				// User successfully authenticated
+			} else {
+				_ = response.Failure;
+
+				if (response.Failure == BioAuthenticationFailures.NoMatch) {
+					// Face detected but didnt match subject!
+				}
+			}
+
+			return response;
 		}
 
 		[HttpGet("authentication/status")]
