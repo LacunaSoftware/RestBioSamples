@@ -70,8 +70,6 @@ export class Authentication2dComponent {
 		try {
 			const subjectIdentifier = SubjectIdentifierInputComponent.subjectIdentifier;
 
-
-
 			const result = await firstValueFrom(this.bio.authentication2d(subjectIdentifier, image));
 
 			this.sessionId = result.sessionId;

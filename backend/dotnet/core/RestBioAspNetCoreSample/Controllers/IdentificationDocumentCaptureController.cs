@@ -86,8 +86,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpGet("id-capture/status")]
-		public async Task<BioSessionResultDataModel> GetSessionStatus(string sessionId) {
-			return await restBioService.GetSessionResultDataAsync(Guid.Parse(sessionId));
+		public async Task<BioSessionStatusModel> GetSessionStatusAsync(Guid sessionId) {
+			return await restBioService.GetIdentificationDocumentCaptureSessionStatusAsync(sessionId);
 		}
 
 	}

@@ -3,7 +3,7 @@
 
 	<app-subject-identifier-input></app-subject-identifier-input>
 
-	<div class="row">
+	<div class="row mx-1">
 		<button mat-flat-button color="primary" [disabled]="isLoading" (click)="doEnrollment2d()">
 			{{ isLoading ? 'Enrolling...' : 'Choose image' }}
 			<input type="file" #enrollment2dInput hidden (change)="handleEnrollment2dFile($event)" />

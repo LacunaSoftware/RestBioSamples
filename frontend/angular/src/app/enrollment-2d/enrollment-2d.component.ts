@@ -6,6 +6,7 @@ import { firstValueFrom } from 'rxjs';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
 import { RestBioService } from '../services/rest-bio.service';
 import { SubjectIdentifierInputComponent } from "../subject-identifier-input/subject-identifier-input.component";
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
 	selector: 'app-enrollment-2d',
@@ -15,13 +16,14 @@ import { SubjectIdentifierInputComponent } from "../subject-identifier-input/sub
 		FormsModule,
 		HttpClientModule,
 		SubjectIdentifierInputComponent,
+		MatButtonModule,
 		ErrorDisplayComponent
 	],
 	templateUrl: './enrollment-2d.component.html',
 	styleUrl: './enrollment-2d.component.scss'
 })
 export class Enrollment2dComponent {
-	
+
 	// Session data
 	sessionId: string | null = null;
 	lastStatus: unknown | null = null;
@@ -68,19 +70,16 @@ export class Enrollment2dComponent {
 		try {
 			const subjectIdentifier = SubjectIdentifierInputComponent.subjectIdentifier;
 
-
-
 			const result = await firstValueFrom(this.bio.enrollment2d(subjectIdentifier, image));
 
 			this.sessionId = result.sessionId;
-			
 
 			// Session completed automatically
 			if (result.success) {
 				console.log('Enrollment session completed', result);
-				
+
 				this.sessionId = result.sessionId;
-				
+
 				// Get session status after successful completion
 				try {
 					const statusResult = await firstValueFrom(this.bio.getEnrollmentSessionStatus(result.sessionId));
@@ -104,13 +103,9 @@ export class Enrollment2dComponent {
 		}
 	}
 
-
-
 	private resetStateForNewSession(): void {
 		this.sessionId = null;
 		this.lastStatus = null;
 		this.errorDisplay?.clearErrors();
 	}
-
-
 }
