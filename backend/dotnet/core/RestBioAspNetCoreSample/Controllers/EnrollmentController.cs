@@ -100,7 +100,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			request.CheckLiveness2d = true;
 			var response = await restBioService.EnrollSubject2dAsync(request);
 
-			if (response.Success) {
+			if (response.Success == true) {
 				_ = response.Result.SubjectId;
 			} else {
 				// Here you can see why the enrollment has Failed
