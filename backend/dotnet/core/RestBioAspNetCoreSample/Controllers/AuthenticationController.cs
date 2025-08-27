@@ -87,7 +87,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("/api/bio/authentication-2d")]
-		public async Task<BioSubjectAuthentication2dResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request) {
+		public async Task<BioAuthenticationSessionResponse> EnrollSubject2dAsync(BioSubjectAuthentication2dRequest request) {
 			// Optionally you can opt to check Liveness2d
 			request.CheckLiveness2d = true;
 			var response = await restBioService.AuthenticateSubject2dAsync(request);
@@ -106,7 +106,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpGet("authentication/status")]
-		public async Task<BioSessionStatusModel> GetSessionStatusAsync(Guid sessionId) {
+		public async Task<BioAuthenticationSessionStatusModel> GetSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetAuthenticationSessionStatusAsync(sessionId);
 		}
 	}

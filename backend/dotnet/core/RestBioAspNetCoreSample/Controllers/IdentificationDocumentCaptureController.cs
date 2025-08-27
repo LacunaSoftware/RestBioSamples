@@ -1,4 +1,5 @@
 using Lacuna.RestPki.Api.Bio.Sessions;
+using Lacuna.RestPki.Api.Bio.Subjects;
 using Lacuna.RestPki.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -86,7 +87,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpGet("id-capture/status")]
-		public async Task<BioSessionStatusModel> GetSessionStatusAsync(Guid sessionId) {
+		public async Task<IdentificationDocumentCaptureSessionStatusModel> GetSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetIdentificationDocumentCaptureSessionStatusAsync(sessionId);
 		}
 
