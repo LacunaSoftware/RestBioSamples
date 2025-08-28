@@ -7,14 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/api/bio/session")]
+	[Route("/api/bio/authentications")]
 	public class AuthenticationController(
 
 		IRestBioService restBioService
 
 	) : ControllerBase {
 
-		[HttpPost("/api/bio/authentication-2d")]
+		[HttpPost]
 		public async Task<BioAuthenticationResponse> EnrollSubject2dAsync(BioAuthenticationRequest request) {
 			// Optionally you can opt to check Liveness2d
 			request.CheckLiveness2d = true;

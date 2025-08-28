@@ -30,12 +30,12 @@ export interface BlobModel {
 	contentType: string;
 }
 
-export interface BioSubjectEnrollment2dRequest {
+export interface BioSubjectEnrollmentRequest {
 	subjectIdentifier: string;
 	faceImage?: BlobModel;
 }
 
-export interface BioSubjectAuthentication2dRequest {
+export interface BioSubjectAuthenticationRequest {
 	faceImage?: BlobModel;
 	subject: {
 		identifier?: string;
@@ -43,7 +43,7 @@ export interface BioSubjectAuthentication2dRequest {
 	};
 }
 
-export interface BioSubjectEnrollment2dResponse {
+export interface BioSubjectEnrollmentResponse {
 	sessionId: string;
 	success: boolean;
 	result?: {
@@ -51,7 +51,7 @@ export interface BioSubjectEnrollment2dResponse {
 	};
 }
 
-export interface BioSubjectAuthentication2dResponse {
+export interface BioSubjectAuthenticationResponse {
 	sessionId: string;
 	success: boolean;
 }
@@ -106,18 +106,18 @@ export class RestBioService {
 		return this.http.post<StartBioSessionResponse>(`/api/bio/session/authentication?${queryString}`, {});
 	}
 
-	enrollment2d(subjectIdentifier: string, image: string): Observable<BioSubjectEnrollment2dResponse> {
-		const body: BioSubjectEnrollment2dRequest = {
+	enrollment2d(subjectIdentifier: string, image: string): Observable<BioSubjectEnrollmentResponse> {
+		const body: BioSubjectEnrollmentRequest = {
 			subjectIdentifier, faceImage: {
 				content: image,
 				contentType: "image/jpeg" // TODO: you must implement the correct file upload type
 			}
 		};
-		return this.http.post<BioSubjectEnrollment2dResponse>(`/api/bio/enrollment-2d`, body);
+		return this.http.post<BioSubjectEnrollmentResponse>(`/api/bio/enrollments`, body);
 	}
 
-	authentication2d(subjectIdentifier: string, image: string): Observable<BioSubjectAuthentication2dResponse> {
-		const body: BioSubjectAuthentication2dRequest = {
+	authentication2d(subjectIdentifier: string, image: string): Observable<BioSubjectAuthenticationResponse> {
+		const body: BioSubjectAuthenticationRequest = {
 			subject: {
 				identifier: subjectIdentifier,
 			},
@@ -126,7 +126,7 @@ export class RestBioService {
 				contentType: "image/jpeg" // TODO: you must implement the correct file upload type
 			}
 		};
-		return this.http.post<BioSubjectAuthentication2dResponse>(`/api/bio/authentication-2d`, body);
+		return this.http.post<BioSubjectAuthenticationResponse>(`/api/bio/authentications`, body);
 	}
 
 	getAuthenticationSessionStatus(sessionId: string): Observable<any> {

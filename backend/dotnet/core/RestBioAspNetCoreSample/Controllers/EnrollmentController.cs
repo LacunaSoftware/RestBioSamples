@@ -6,14 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/api/bio/session")]
+	[Route("/api/bio/enrollments")]
 	public class EnrollmentController(
 
 		IRestBioService restBioService
 
 	) : ControllerBase {
 
-		[HttpPost("/api/bio/enrollment")]
+		[HttpPost]
 		public async Task<BioEnrollmentResponse> EnrollSubjectAsync(BioEnrollmentRequest request) {
 			// Optionally you can opt to check Liveness2d
 			request.CheckLiveness2d = true;
