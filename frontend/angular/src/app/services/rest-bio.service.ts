@@ -44,7 +44,7 @@ export interface BioSubjectAuthenticationRequest {
 }
 
 export interface BioSubjectEnrollmentResponse {
-	sessionId: string;
+	enrollmentId: string;
 	success: boolean;
 	result?: {
 		subjectId: string;
@@ -62,12 +62,12 @@ export class RestBioService {
 
 	// Implemented backend endpoints (only liveness for now)
 	startLivenessSession(captureIdentificationDocument = false): Observable<StartBioSessionResponse> {
-		return this.http.post<StartBioSessionResponse>(`/api/bio/session/liveness?captureIdentificationDocument=${captureIdentificationDocument}`, {});
+		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/liveness?captureIdentificationDocument=${captureIdentificationDocument}`, {});
 	}
 
 	completeLivenessSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/liveness/complete`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/liveness/complete`, body);
 	}
 
 	// Enrollment session endpoints
@@ -81,16 +81,16 @@ export class RestBioService {
 			params.append('dangerousOverrideIfAlreadyEnrolled', dangerousOverrideIfAlreadyEnrolled.toString());
 		}
 		const queryString = params.toString();
-		return this.http.post<StartBioSessionResponse>(`/api/bio/session/enrollment?${queryString}`, {});
+		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/enrollment?${queryString}`, {});
 	}
 
 	getEnrollmentSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/enrollment/status?sessionId=${encodeURIComponent(sessionId)}`);
+		return this.http.get(`/api/bio/sessions/enrollment/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeEnrollmentSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/enrollment/complete`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/enrollment/complete`, body);
 	}
 
 	// Authentication session endpoints
@@ -103,7 +103,7 @@ export class RestBioService {
 			params.append('bioSubjectReference.identifier', bioSubjectReference.identifier);
 		}
 		const queryString = params.toString();
-		return this.http.post<StartBioSessionResponse>(`/api/bio/session/authentication?${queryString}`, {});
+		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/authentication?${queryString}`, {});
 	}
 
 	enrollment2d(subjectIdentifier: string, image: string): Observable<BioSubjectEnrollmentResponse> {

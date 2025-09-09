@@ -72,17 +72,17 @@ export class Enrollment2dComponent {
 
 			const result = await firstValueFrom(this.bio.enrollment2d(subjectIdentifier, image));
 
-			this.sessionId = result.sessionId;
+			this.sessionId = result.enrollmentId;
 
 			// Session completed automatically
 			if (result.success) {
 				console.log('Enrollment session completed', result);
 
-				this.sessionId = result.sessionId;
+				this.sessionId = result.enrollmentId;
 
 				// Get session status after successful completion
 				try {
-					const statusResult = await firstValueFrom(this.bio.getEnrollmentSessionStatus(result.sessionId));
+					const statusResult = await firstValueFrom(this.bio.getEnrollmentSessionStatus(result.enrollmentId));
 					this.lastStatus = statusResult;
 					console.log('Enrollment 2D session status:', statusResult);
 				} catch (statusError) {
