@@ -1,0 +1,23 @@
+<div class="session-content">
+	<h2>Enrollment 2D</h2>
+
+	<app-subject-identifier-input></app-subject-identifier-input>
+
+	<div class="row mx-1">
+		<button mat-flat-button color="primary" [disabled]="isLoading" (click)="doEnrollment2d()">
+			{{ isLoading ? 'Enrolling...' : 'Choose image' }}
+			<input type="file" #enrollment2dInput hidden (change)="handleEnrollment2dFile($event)" />
+		</button>
+	</div>
+
+	<app-error-display #errorDisplay></app-error-display>
+
+	<div class="form-row" *ngIf="sessionId as sid">
+		<div>SessionId: <code>{{ sid }}</code></div>
+	</div>
+
+	<div class="status-result" *ngIf="lastStatus as status">
+		<h3>Session Result:</h3>
+		<pre>{{ status | json }}</pre>
+	</div>
+</div>

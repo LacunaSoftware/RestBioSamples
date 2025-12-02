@@ -1,0 +1,31 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node-terminal",
+      "request": "launch",
+      "name": "Angular: npm start (terminal)",
+      "command": "npm start",
+      "cwd": "${workspaceFolder}/frontend/angular"
+    },
+    {
+      "type": "firefox",
+      "request": "launch",
+      "name": "Angular: Launch in Firefox",
+      "url": "http://localhost:4200",
+      "webRoot": "${workspaceFolder}/frontend/angular",
+      "reAttach": true
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Angular + Firefox",
+      "configurations": [
+        "Angular: npm start (terminal)",
+        "Angular: Launch in Firefox"
+      ],
+      "stopAll": true
+    }
+  ]
+}
+

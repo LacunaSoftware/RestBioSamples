@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "angular: start",
+      "type": "npm",
+      "script": "start",
+      "path": "frontend/angular",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "custom",
+        "applyTo": "allDocuments",
+        "fileLocation": "auto",
+        "pattern": {
+          "regexp": ".+"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": ".+",
+          "endsPattern": "(Application bundle generation complete|Watch mode enabled\\. Watching for file changes\\.\\.|Local:\\s+https?://\\S+/|press h \\+ enter to show help)"
+        }
+      }
+    }
+  ]
+}
+
