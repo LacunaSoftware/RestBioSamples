@@ -1,0 +1,11 @@
+application:
+  restPkiCore:
+    endpoint: "https://you_example_restpki_instance.com"
+    api-key: "ENTER_YOU_API_KEY_HERE"
+
+spring:
+  application:
+    name: demo
+
+server:
+  port: 5078

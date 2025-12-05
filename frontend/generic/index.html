@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>RestBioSamples - Generic Frontend Demo</title>
+</head>
+
+<script type="text/javascript" src="https://cdn.lacunasoftware.com/libs/restpki/lacuna-restpki-widget-1.2.1.min.js"
+	integrity="sha256-PziIkD0H3D/3KAcwE/u7u8MTbd6k62IlI9mmqzkc9r0="
+	crossorigin="anonymous"></script>
+
+<body>
+	<h1>RestPkiWidget - Bio Session Demo</h1>
+	<script>
+
+		async function livenessTest() {
+			let widget = RestPkiWidget.init();
+
+			fetch("/api/bio/sessions/liveness", {
+				method: "POST",
+			}).then(async (response) => {
+				let sessionInfo = await response.json();
+				let result = await widget.performBioSession(sessionInfo.sessionUrl);
+				fetch("/api/bio/sessions/liveness/completion", {
+					method: "POST",
+					body: JSON.stringify({
+						ticket: result.completeTicket
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}).then(async (response) => {
+					let completionResult = await response.json();
+					console.log(completionResult);
+				});
+			});
+		}
+
+	</script>
+	<a onclick="livenessTest()" href="#">Liveness Test</a>
+</body>
+
+</html>

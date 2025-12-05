@@ -67,7 +67,7 @@ export class RestBioService {
 
 	completeLivenessSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/liveness/complete`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/liveness/completion`, body);
 	}
 
 	// Enrollment session endpoints
@@ -90,7 +90,7 @@ export class RestBioService {
 
 	completeEnrollmentSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/enrollment/complete`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/enrollment/completion`, body);
 	}
 
 	// Authentication session endpoints
@@ -135,7 +135,7 @@ export class RestBioService {
 
 	completeAuthenticationSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/authentication/complete`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/authentication/completion`, body);
 	}
 
 	// Identification Document Capture session endpoints
@@ -153,7 +153,7 @@ export class RestBioService {
 
 	completeIdentificationDocumentCaptureSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/id-capture/complete`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/id-capture/completion`, body);
 	}
 }
 

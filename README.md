@@ -31,7 +31,7 @@ sequenceDiagram
     RestBio-->>Widget: Complete ticket
     Widget-->>Frontend: completeTicket
 
-    Frontend->>Backend: Complete Session (POST /api/bio/session/{type}/complete)
+    Frontend->>Backend: Complete Session (POST /api/bio/session/{type}/completion)
     Backend->>RestBio: Complete session with ticket
     RestBio-->>Backend: Session result
     Backend-->>Frontend: result.success, sessionId

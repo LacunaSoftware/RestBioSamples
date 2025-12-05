@@ -2,6 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "type": "java",
+      "name": "DemoApplication",
+      "request": "launch",
+      "mainClass": "com.lacunasoftware.demo.DemoApplication",
+      "projectName": "java"
+    },
+    {
       "type": "node-terminal",
       "request": "launch",
       "name": "Angular: npm start (terminal)",
