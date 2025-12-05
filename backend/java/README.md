@@ -6,8 +6,8 @@ For samples in other languages, see the [repository root](https://github.com/Lac
 
 ## Sample Overview
 
-The sample uses **Spring Boot** (Java 21) and is located in [backend/java](backend/java).  
-The main class is [DemoApplication.java](backend/java/src/main/java/com/lacunasoftware/demo/DemoApplication.java).
+The sample uses **Spring Boot** (Java 21).
+The main class is [DemoApplication.java](src/main/java/com/lacunasoftware/demo/DemoApplication.java).
 
 ### How to Run
 
