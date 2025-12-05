@@ -7,7 +7,7 @@ For other languages, please visit the [repository root](https://github.com/Lacun
 
 ## Default sample (Spring Boot)
 
-A sample using **Spring Boot** with Java 25 can be found in the folder [backend/java](backend/java). The application entry point is [DemoApplication.java](backend/java/src/main/java/com/lacunasoftware/demo/DemoApplication.java).
+A sample using **Spring Boot** with Java 21 can be found in the folder [backend/java](backend/java). The application entry point is [DemoApplication.java](backend/java/src/main/java/com/lacunasoftware/demo/DemoApplication.java).
 
 Steps to execute the sample:
 
@@ -35,7 +35,7 @@ bash
    gradle bootRun
 ```
 
-4. The application will start on `http://localhost:8080`
+4. The application will start on `http://localhost:5078`
 
 ## Available Endpoints
 
@@ -57,7 +57,7 @@ restPkiOptions.setApiKey("your-api-key-here");
 
 ## Frontend
 
-The application includes a simple HTML interface at `http://localhost:8080/` with a button to trigger the liveness example.
+The application includes a simple HTML interface at `http://localhost:5078/` with a button to trigger the liveness example.
 
 The frontend calls the `/api/bio/liveness` endpoint and displays the returned session URL as a clickable link.
 

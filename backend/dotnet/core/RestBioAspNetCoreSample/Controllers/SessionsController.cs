@@ -48,7 +48,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("liveness/complete")]
+		[HttpPost("liveness/completion")]
 		public async Task<LivenessSessionStatusModel> CompleteLivenessSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete a liveness session.
@@ -154,7 +154,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("enrollment/complete")]
+		[HttpPost("enrollment/completion")]
 		public async Task<BioEnrollmentSessionStatusModel> CompleteEnrollmentSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an enrollment session.
@@ -229,7 +229,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("authentication/complete")]
+		[HttpPost("authentication/completion")]
 		public async Task<BioAuthenticationSessionStatusModel> CompleteAuthenticationSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an authentication session.
@@ -299,7 +299,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("id-capture/complete")]
+		[HttpPost("id-capture/completion")]
 		public async Task<IdentificationDocumentCaptureSessionStatusModel> CompleteIdentificationDocumentCaptureSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an identification document capture session.
