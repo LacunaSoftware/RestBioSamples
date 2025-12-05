@@ -18,23 +18,87 @@
 
     <div class="container mt-5">
         <div class="row">
-            <div class="col-md-6">
-                <h1>Bem-vindo!</h1>
+            <div class="col-md-8">
 
-                <button class="btn btn-primary" onclick="livenessExample()">Exemplo de sessão Liveness</button>
-                <div id="resultado" class="mt-3"></div>
+                <h1 class="mb-4">Endpoints Demo</h1>
+
+                <h4>Iniciar sessão Liveness</h4>
+                <button class="btn btn-primary" onclick="startLiveness()">Iniciar sessão</button>
+                <div id="startResult" class="mt-3 mb-4"></div>
+
+                <hr>
+
+                <h4> Consultar status da sessão</h4>
+                <label>SessionId</label>
+                <input id="statusInput" class="form-control" placeholder="Digite o sessionId">
+                <button class="btn btn-secondary mt-2" onclick="checkStatus()">Ver status</button>
+                <div id="statusResult" class="mt-3 mb-4"></div>
+
+                <hr>
+
+                <h4> Completar sessão</h4>
+                <label>Ticket</label>
+                <input id="completeInput" class="form-control" placeholder="Digite o ticket">
+                <button class="btn btn-success mt-2" onclick="completeSession()">Completar</button>
+                <div id="completeResult" class="mt-3 mb-4"></div>
+
             </div>
         </div>
     </div>
 
     <script>
-        function livenessExample() {
+
+        function startLiveness() {
             fetch('api/bio/liveness')
-                .then(response => response.text())
+                .then(r => r.json())
                 .then(data => {
-                    document.getElementById('resultado').innerHTML = `<p>Resposta: <a href="${data}">${data}</a></p>`;
+                    document.getElementById('startResult').innerHTML = `
+                    <div class="alert alert-info">
+                        <p><strong>Session ID:</strong> ${data.sessionId}</p>
+                        <p><strong>Session Type:</strong> ${data.sessionType}</p>
+                        <p><strong>Session URL:</strong>
+                            <a target="_blank" href="${data.sessionUrl}">${data.sessionUrl}</a>
+                        </p>
+                    </div>
+                `;
                 })
-                .catch(erro => console.error('Erro:', error));
+                .catch(err => console.error(err));
+        }
+
+        function checkStatus() {
+            const sessionId = document.getElementById('statusInput').value;
+
+            if (!sessionId) {
+                alert("Digite o sessionId");
+                return;
+            }
+
+            fetch(`api/bio/liveness/status/${sessionId}`)
+                .then(r => r.text())
+                .then(data => {
+                    document.getElementById('statusResult').innerHTML = `
+                    <pre class="alert alert-warning">${data}</pre>
+                `;
+                })
+                .catch(err => console.error(err));
+        }
+
+        function completeSession() {
+            const ticket = document.getElementById('completeInput').value;
+
+            if (!ticket) {
+                alert("Digite o ticket");
+                return;
+            }
+
+            fetch(`api/bio/liveness/complete/${ticket}`)
+                .then(r => r.text())
+                .then(data => {
+                    document.getElementById('completeResult').innerHTML = `
+                    <pre class="alert alert-success">${data}</pre>
+                `;
+                })
+                .catch(err => console.error(err));
         }
     </script>
 
