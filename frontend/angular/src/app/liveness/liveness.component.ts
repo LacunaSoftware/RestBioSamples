@@ -34,8 +34,6 @@ export class LivenessComponent {
 			const res: StartBioSessionResponse = await firstValueFrom(this.bio.startLivenessSession());
 			this.sessionId = res.sessionId;
 
-
-
 			// Automatically perform bio session with widget
 			const widget = new RestPkiWidget();
 

@@ -1,3 +1,0 @@
-restPkiCore:
-  endpoint: "https://dev-restpkicore.example.com/"
-  apiKey: "DEV_API_KEY"

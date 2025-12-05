@@ -1,24 +1,27 @@
 package com.lacunasoftware.demo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.lacunasoftware.demo.config.ApplicationProperties;
 import com.lacunasoftware.restpkicore.RestPkiOptions;
 
+@Component
 public class Util {
 
-	private static ApplicationProperties properties;
+	@Autowired
+	private ApplicationProperties properties;
 
 	@Autowired
-	private static void setProperties(ApplicationProperties properties) {
-		Util.properties = properties;
+	public Util(ApplicationProperties properties) {
+		this.properties = properties;
 	}
 
-	public static boolean isNullOrEmpty(String string) {
+	public boolean isNullOrEmpty(String string) {
 		return string == null || string.isEmpty();
 	}
 
-	public static RestPkiOptions getRestPkiCoreOptions() {
+	public RestPkiOptions getRestPkiCoreOptions() {
 
 		String apiKey = properties.getRestPkiCore().getApiKey();
 

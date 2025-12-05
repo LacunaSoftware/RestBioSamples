@@ -1,15 +1,13 @@
 package com.lacunasoftware.demo.config;
 
-import org.springframework.stereotype.Component;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Component
+@ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
 
-    private final RestPkiCoreProperties restPkiCore;
-
-    public ApplicationProperties(RestPkiCoreProperties restPkiCore) {
-        this.restPkiCore = restPkiCore;
-    }
+	@Autowired
+    private RestPkiCoreProperties restPkiCore;
 
     public RestPkiCoreProperties getRestPkiCore() {
         return restPkiCore;

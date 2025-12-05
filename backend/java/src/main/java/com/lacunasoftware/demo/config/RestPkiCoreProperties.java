@@ -1,8 +1,8 @@
 package com.lacunasoftware.demo.config;
 
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 
-@Component
+@Configuration
 public class RestPkiCoreProperties {
     private String endpoint;
     private String apiKey;

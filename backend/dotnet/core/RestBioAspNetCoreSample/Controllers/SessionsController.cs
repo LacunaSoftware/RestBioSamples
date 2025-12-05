@@ -29,6 +29,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			var response = await restBioService.StartLivenessSessionAsync(new() {
 				TrustedOrigin = exampleConfig.Value.TrustedOrigin,
 				CaptureIdentificationDocument = captureIdentificationDocument,
+				SubjectIdentifier = "Example",
 				// additional request properties
 				// FaceLivenessProvider = Lacuna.RestPki.Api.FaceLivenessProviders.FortFaceSdkLiveness
 			});
