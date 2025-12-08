@@ -38,8 +38,57 @@
 			});
 		}
 
+		async function enrollmentTest() {
+			let widget = RestPkiWidget.init();
+
+			fetch("/api/bio/sessions/enrollment", {
+				method: "POST",
+			}).then(async (response) => {
+				let sessionInfo = await response.json();
+				let result = await widget.performBioSession(sessionInfo.sessionUrl);
+				fetch("/api/bio/sessions/enrollment/completion", {
+					method: "POST",
+					body: JSON.stringify({
+						ticket: result.completeTicket
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}).then(async (response) => {
+					let completionResult = await response.json();
+					console.log(completionResult);
+				});
+			});
+		}
+
+
+		async function authenticationTest() {
+			let widget = RestPkiWidget.init();
+
+			fetch("/api/bio/sessions/authentication", {
+				method: "POST",
+			}).then(async (response) => {
+				let sessionInfo = await response.json();
+				let result = await widget.performBioSession(sessionInfo.sessionUrl);
+				fetch("/api/bio/sessions/authentication/completion", {
+					method: "POST",
+					body: JSON.stringify({
+						ticket: result.completeTicket
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}).then(async (response) => {
+					let completionResult = await response.json();
+					console.log(completionResult);
+				});
+			});
+		}
+
 	</script>
-	<a onclick="livenessTest()" href="#">Liveness Test</a>
+	<a onclick="livenessTest()" href="#">Liveness Test</a><br><br>
+	<a onclick="enrollmentTest()" href="#">Enrollment Test</a><br><br>
+	<a onclick="authenticationTest()" href="#">Authentication Test</a><br><br>
 </body>
 
 </html>

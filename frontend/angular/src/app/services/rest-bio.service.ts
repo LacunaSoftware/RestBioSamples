@@ -130,12 +130,12 @@ export class RestBioService {
 	}
 
 	getAuthenticationSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/authentication/status?sessionId=${encodeURIComponent(sessionId)}`);
+		return this.http.get(`/api/bio/sessions/authentication/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeAuthenticationSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/authentication/completion`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/authentication/completion`, body);
 	}
 
 	// Identification Document Capture session endpoints
@@ -148,7 +148,7 @@ export class RestBioService {
 	}
 
 	getLivenessSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
+		return this.http.get(`/api/bio/sessions/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeIdentificationDocumentCaptureSession(ticket: string): Observable<CompleteBioSessionResponse> {
