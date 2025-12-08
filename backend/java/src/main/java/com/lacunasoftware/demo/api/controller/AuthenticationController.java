@@ -16,7 +16,7 @@ import com.lacunasoftware.restpkicore.*;
 
 @RestController
 @RequestMapping("api/bio/sessions")
-public class EnrollmentController {
+public class AuthenticationController {
 
     @Autowired
     private Util util;
@@ -26,38 +26,35 @@ public class EnrollmentController {
     }
 
     @PostMapping("authentication")
-    public ResponseEntity<StartBioAuthenticationSessionRequest> enrollmentExample() throws Exception {
+    public ResponseEntity<StartBioSessionResponse> authenticationExample(@RequestBody String subjectIdentifier ) throws Exception {
         RestBioService service = getService();
         StartBioAuthenticationSessionRequest request = new StartBioAuthenticationSessionRequest();
 
-        request.setSubjectIdentifier(null);
+        System.out.println(subjectIdentifier);
+        BioSubjectModel model = service.GetSubjectByIdentifierAsync(subjectIdentifier);
 
-        // Here you can set the subjectIdentifier and trustedOrigin properties
-        // according to your application's needs. In this example, we are just
-        // setting some static values.
-        request.setSubjectIdentifier("f6bf3b8f-726f-4dad-b544-173862dc1223");
+        BioSubjectReference bioSubject = new BioSubjectReference();
+        bioSubject.setId(model.getId());
+        bioSubject.setIdentifier(model.getIdentifier());
 
-        // On our example, all frontends are served from this origin. Change it to your
-        // application's origin. (maybe you want to set it dynamically according to the
-        // request/client).
+        request.setSubject(bioSubject);
         request.setTrustedOrigin("http://localhost:4200/");
 
-        StartBioAuthenticationSessionRequest bioAuthenticationSessionResponse = service.StartAuthenticationSessionAsync(request);
-
+        StartBioSessionResponse bioAuthenticationSessionResponse = service.StartAuthenticationSessionAsync(request);
         return ResponseEntity.ok(bioAuthenticationSessionResponse);
     }
 
     @GetMapping("authentication/status")
-    public ResponseEntity<BioAuthenticationSessionStatusModel> startEnrollmentSession(@RequestParam UUID sessionId) throws Exception {
+    public ResponseEntity<BioAuthenticationSessionStatusModel> startAuthenticantionSession(@RequestParam UUID sessionId) throws Exception {
         RestBioService service = getService();
-        BioAuthenticationSessionStatusModel status = service.Get(sessionId);
+        BioAuthenticationSessionStatusModel status = service.GetAuthenticationSessionStatusAsync(sessionId);
         return ResponseEntity.ok(status);
     }
 
     @PostMapping("authentication/completion")
-    public ResponseEntity<BioAuthenticationSessionStatusModel> completeLivenessSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
+    public ResponseEntity<BioAuthenticationSessionStatusModel> completeAuthenticantionSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
         RestBioService service = getService();
-        BioAuthenticationSessionStatusModel result = service.CompleteEnrollmentSessionAsync(request.getTicket());
+        BioAuthenticationSessionStatusModel result = service.CompleteAuthenticationSessionAsync(request.getTicket());
         return ResponseEntity.ok(result);
     }
 

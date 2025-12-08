@@ -138,22 +138,8 @@ export class RestBioService {
 		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/authentication/completion`, body);
 	}
 
-	// Identification Document Capture session endpoints
-	startIdentificationDocumentCaptureSession(): Observable<StartBioSessionResponse> {
-		return this.http.post<StartBioSessionResponse>(`/api/bio/session/id-capture`, {});
-	}
-
-	getIdentificationDocumentCaptureStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/id-capture/status?sessionId=${encodeURIComponent(sessionId)}`);
-	}
-
 	getLivenessSessionStatus(sessionId: string): Observable<any> {
 		return this.http.get(`/api/bio/sessions/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
-	}
-
-	completeIdentificationDocumentCaptureSession(ticket: string): Observable<CompleteBioSessionResponse> {
-		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/id-capture/completion`, body);
 	}
 }
 

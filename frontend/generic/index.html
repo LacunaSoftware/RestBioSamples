@@ -65,9 +65,24 @@
 		async function authenticationTest() {
 			let widget = RestPkiWidget.init();
 
+			let subjectId = document.getElementById('authSubjectId').value;
+			
+			if (!subjectId || subjectId.trim() === '') {
+				alert('Por favor, digite o Subject Identifier!');
+				return;
+			}
+
 			fetch("/api/bio/sessions/authentication", {
 				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(subjectId)
 			}).then(async (response) => {
+				if (!response.ok) {
+					alert('Erro: Subject não encontrado ou não cadastrado!');
+					return;
+				}
 				let sessionInfo = await response.json();
 				let result = await widget.performBioSession(sessionInfo.sessionUrl);
 				fetch("/api/bio/sessions/authentication/completion", {
@@ -82,13 +97,16 @@
 					let completionResult = await response.json();
 					console.log(completionResult);
 				});
+			}).catch(error => {
+				console.error('Erro:', error);
+				alert('Erro ao autenticar!');
 			});
 		}
 
 	</script>
 	<a onclick="livenessTest()" href="#">Liveness Test</a><br><br>
 	<a onclick="enrollmentTest()" href="#">Enrollment Test</a><br><br>
-	<a onclick="authenticationTest()" href="#">Authentication Test</a><br><br>
+	<a onclick="authenticationTest()" href="#">Authentication Test</a> - <input type="text" id="authSubjectId" placeholder="Digite o Subject Identifier">
 </body>
 
 </html>

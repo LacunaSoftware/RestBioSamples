@@ -30,34 +30,22 @@ public class EnrollmentController {
         RestBioService service = getService();
         StartBioEnrollmentSessionRequest request = new StartBioEnrollmentSessionRequest();
 
-        request.setSubjectIdentifier(null);
-
-        // Here you can set the subjectIdentifier and trustedOrigin properties
-        // according to your application's needs. In this example, we are just
-        // setting some static values.
-        request.setSubjectIdentifier("f6bf3b8f-726f-4dad-b544-173862dc1223");
-
-        // On our example, all frontends are served from this origin. Change it to your
-        // application's origin. (maybe you want to set it dynamically according to the
-        // request/client).
+        request.setSubjectIdentifier(UUID.randomUUID().toString());
         request.setTrustedOrigin("http://localhost:4200/");
 
         StartBioSessionResponse bioEnrollmentSessionResponse = service.StartEnrollmentSessionAsync(request);
-
         return ResponseEntity.ok(bioEnrollmentSessionResponse);
     }
 
     @GetMapping("enrollment/status")
-    public ResponseEntity<BioEnrollmentSessionStatusModel> startEnrollmentSession(@RequestParam UUID sessionId)
-            throws Exception {
+    public ResponseEntity<BioEnrollmentSessionStatusModel> startEnrollmentSession(@RequestParam UUID sessionId) throws Exception {
         RestBioService service = getService();
         BioEnrollmentSessionStatusModel status = service.GetEnrollmentSessionStatusAsync(sessionId);
         return ResponseEntity.ok(status);
     }
 
     @PostMapping("enrollment/completion")
-    public ResponseEntity<BioEnrollmentSessionStatusModel> completeLivenessSession(
-            @RequestBody CompleteBioSessionRequest request) throws Exception {
+    public ResponseEntity<BioEnrollmentSessionStatusModel> completeLivenessSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
         RestBioService service = getService();
         BioEnrollmentSessionStatusModel result = service.CompleteEnrollmentSessionAsync(request.getTicket());
         return ResponseEntity.ok(result);
