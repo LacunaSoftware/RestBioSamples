@@ -41,21 +41,21 @@ public class LivenessController {
 		// request/client).
         request.setTrustedOrigin("http://localhost:4200/");
 
-        StartBioSessionResponse bioSessionResponse = service.StartLivenessSessionAsync(request);
+        StartBioSessionResponse bioSessionResponse = service.StartLivenessSession(request);
         return ResponseEntity.ok(bioSessionResponse);
     }
 
     @GetMapping("liveness/status")
     public ResponseEntity<LivenessSessionStatusModel> livenessSessionStatus(@RequestParam UUID sessionId) throws Exception {
         RestBioService service = getService();
-        LivenessSessionStatusModel status = service.GetLivenessSessionStatusAsync(sessionId);
+        LivenessSessionStatusModel status = service.GetLivenessSessionStatus(sessionId);
         return ResponseEntity.ok(status);
     }
 
     @PostMapping("liveness/completion")
     public ResponseEntity<LivenessSessionStatusModel> completeLivenessSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
         RestBioService service = getService();
-        LivenessSessionStatusModel result = service.CompleteLivenessSessionAsync(request.getTicket());
+        LivenessSessionStatusModel result = service.CompleteLivenessSession(request.getTicket());
         return ResponseEntity.ok(result);
     }
 
