@@ -1,92 +1,69 @@
+# RestBio Java Sample
 
-# RestBio samples for Java
+This folder contains a **Java sample project** demonstrating how to use Lacuna Software's **Biometric APIs/SDKs** with Spring Boot.
 
-This folder contains **Java sample projects** demonstrating the usage of Lacuna Software's **Biometric APIs/SDKs** in various programming languages and frameworks.
+For samples in other languages, see the [repository root](https://github.com/LacunaSoftware/RestBioSamples).
 
-For other languages, please visit the [repository root](https://github.com/LacunaSoftware/RestBioSamples).
+## Sample Overview
 
-## Default sample (Spring Boot)
+The sample uses **Spring Boot** (Java 21).
+The main class is [DemoApplication.java](src/main/java/com/lacunasoftware/demo/DemoApplication.java).
 
-A sample using **Spring Boot** with Java 21 can be found in the folder [backend/java](backend/java). The application entry point is [DemoApplication.java](backend/java/src/main/java/com/lacunasoftware/demo/DemoApplication.java).
+### How to Run
 
-Steps to execute the sample:
+1. **Clone the repository:**
+	```bash
+	git clone https://github.com/LacunaSoftware/RestBioSamples.git
+	```
 
-1. [Download the project](https://github.com/LacunaSoftware/RestBioSamples/archive/master.zip) or clone the repository:
+2. **Navigate to the Java backend folder:**
+	```bash
+	cd backend/java
+	```
 
-bash
+3. **Build and run the project with Gradle:**
+	```bash
+	gradle bootRun
+	```
 
-```bash
-   git clone https://github.com/LacunaSoftware/RestBioSamples.git
-```
+4. The API will be available at [http://localhost:5078](http://localhost:5078).
 
-2. Navigate to the Java project folder:
+## Using the Lacuna REST PKI Core Client Library
 
-bash
-
-```bash
-   cd backend/java
-```
-
-3. Build and run the project using Gradle:
-
-bash
-
-```bash
-   gradle bootRun
-```
-
-4. The application will start on `http://localhost:5078`
-
-## Available Endpoints
-
-### Liveness Session
-
-- **URL:** `GET /api/bio/liveness`
-- **Description:** Starts a liveness session and returns a session URL
-- **Authentication:** API key and endpoint URL must be configured in the controller
-- **Returns:** A URL string to be used in the frontend
-
-To use this endpoint, update the API key and endpoint URL in [LivenessController.java](backend/java/src/main/java/com/lacunasoftware/demo/api/controller/LivenessController.java):
-
-java
-
-```java
-restPkiOptions.setEndpoint("https://your-endpoint.core.pki.rest/");
-restPkiOptions.setApiKey("your-api-key-here");
-```
+This sample uses the Lacuna REST PKI Core Client library (RestPkiNGJavaClient) to interact with Lacuna's biometric APIs.
+Check the [GitHub repository](https://github.com/LacunaSoftware/RestPkiNGJavaClient) for the latest version and additional usage instructions.
 
 ## Frontend
 
-The application includes a simple HTML interface at `http://localhost:5078/` with a button to trigger the liveness example.
-
-The frontend calls the `/api/bio/liveness` endpoint and displays the returned session URL as a clickable link.
-
-See [index.html](backend/java/src/main/resources/static/index.html) for the implementation.
+To run a frontend sample, go to the repository root and check the available frontend options in the main [README](/README.md).  
+Choose a frontend, follow its instructions, and it will run on port `4200`.
 
 ## Requirements
 
-- **Java 21** or higher
+- **Java 21** or newer
 - **Gradle 8.0+**
 
-## Project structure
+## Project Structure
 
-- `backend/java/src/main/java/com/lacunasoftware/demo/` - Main application code
-    - `Controllers/` - REST API endpoints
-    - `Configuration/` - Application configuration
-    - `DemoApplication.java` - Application entry point
-- `backend/java/src/main/resources/` - Application properties and static files
-    - `application.json` - Application configuration
+- `src/main/java/com/lacunasoftware/demo/`
+  - `controllers/` – REST API endpoints
+  - `configuration/` – Application configuration
+  - `DemoApplication.java` – Application entry point
+- `src/main/resources/`
+  - `application.json` – Application configuration
 
 ## Dependencies
 
-The project uses Spring Boot 4.0.0 with the following key dependencies:
+Key dependencies:
 
-- **Spring Boot 4.0.0** - Latest version with enhanced features
-- **Spring Web MVC** - RESTful API development
-- **Spring Boot DevTools** - Development tools for faster iteration
-- **Lacuna REST PKI Core Client 1.3.0** - Biometric APIs integration
+- **Spring Boot 3.x** – Modern Spring Boot framework
+- **Spring Web MVC** – REST API support
+- **Spring Boot DevTools** – Developer tools
+- **Lacuna REST PKI Core Client** – Biometric APIs integration
 
-## See also
+> **Note:** Update the version numbers in `build.gradle` as needed.
+
+## See Also
 
 - [Samples in other programming languages](https://github.com/LacunaSoftware/RestBioSamples)
 - [Spring Boot Documentation](https://spring.io/projects/spring-boot)
