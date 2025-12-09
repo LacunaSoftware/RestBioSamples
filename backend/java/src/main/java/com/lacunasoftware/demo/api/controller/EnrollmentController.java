@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lacunasoftware.demo.Util;
+import com.lacunasoftware.demo.api.dto.StartEnrollmentRequestDTO;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
@@ -26,12 +27,25 @@ public class EnrollmentController {
     }
 
     @PostMapping("enrollment")
-    public ResponseEntity<StartBioSessionResponse> enrollmentExample() throws Exception {
+    public ResponseEntity<StartBioSessionResponse> enrollmentExample(@RequestBody StartEnrollmentRequestDTO requestDTO) throws Exception {
+
+        if (requestDTO.getSubjectIdentifier() == null || requestDTO.getSubjectIdentifier().trim().isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
         RestBioService service = getService();
         StartBioEnrollmentSessionRequest request = new StartBioEnrollmentSessionRequest();
 
-        request.setSubjectIdentifier(UUID.randomUUID().toString());
+        request.setSubjectIdentifier(requestDTO.getSubjectIdentifier().trim());
         request.setTrustedOrigin("http://localhost:4200/");
+
+        if (requestDTO.getCaptureIdentificationDocument() != null) {
+            request.setCaptureIdentificationDocument(requestDTO.getCaptureIdentificationDocument());
+        }
+
+        if (requestDTO.getDangerousOverrideIfAlreadyEnrolled() != null) {
+            request.setDangerousOverrideIfAlreadyEnrolled(requestDTO.getDangerousOverrideIfAlreadyEnrolled());
+        }
 
         StartBioSessionResponse bioEnrollmentSessionResponse = service.StartEnrollmentSessionAsync(request);
         return ResponseEntity.ok(bioEnrollmentSessionResponse);

@@ -72,16 +72,19 @@ export class RestBioService {
 
 	// Enrollment session endpoints
 	startEnrollmentSession(subjectIdentifier: string, captureIdentificationDocument?: boolean, dangerousOverrideIfAlreadyEnrolled?: boolean): Observable<StartBioSessionResponse> {
-		const params = new URLSearchParams();
-		params.append('subjectIdentifier', subjectIdentifier);
+		const body: any = {
+			subjectIdentifier: subjectIdentifier
+		};
+		
 		if (captureIdentificationDocument !== undefined) {
-			params.append('captureIdentificationDocument', captureIdentificationDocument.toString());
+			body.captureIdentificationDocument = captureIdentificationDocument;
 		}
+		
 		if (dangerousOverrideIfAlreadyEnrolled !== undefined) {
-			params.append('dangerousOverrideIfAlreadyEnrolled', dangerousOverrideIfAlreadyEnrolled.toString());
+			body.dangerousOverrideIfAlreadyEnrolled = dangerousOverrideIfAlreadyEnrolled;
 		}
-		const queryString = params.toString();
-		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/enrollment?${queryString}`, {});
+		
+		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/enrollment`, body);
 	}
 
 	getEnrollmentSessionStatus(sessionId: string): Observable<any> {
@@ -95,15 +98,10 @@ export class RestBioService {
 
 	// Authentication session endpoints
 	startAuthenticationSession(bioSubjectReference: BioSubjectReference): Observable<StartBioSessionResponse> {
-		const params = new URLSearchParams();
-		if (bioSubjectReference.id) {
-			params.append('bioSubjectReference.id', bioSubjectReference.id);
-		}
-		if (bioSubjectReference.identifier) {
-			params.append('bioSubjectReference.identifier', bioSubjectReference.identifier);
-		}
-		const queryString = params.toString();
-		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/authentication?${queryString}`, {});
+		return this.http.post<StartBioSessionResponse>(
+			`/api/bio/sessions/authentication`,
+			bioSubjectReference
+		);
 	}
 
 	enrollment2d(subjectIdentifier: string, image: string): Observable<BioSubjectEnrollmentResponse> {
