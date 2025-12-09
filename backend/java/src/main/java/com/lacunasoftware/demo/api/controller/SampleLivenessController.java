@@ -15,8 +15,8 @@ import com.lacunasoftware.demo.Util;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions/liveness")
-public class LivenessController {
+@RequestMapping("sample-api/sessions/liveness")
+public class SampleLivenessController {
 
     @Autowired
     private Util util;

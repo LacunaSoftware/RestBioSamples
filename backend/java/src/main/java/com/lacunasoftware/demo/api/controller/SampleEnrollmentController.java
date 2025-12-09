@@ -16,8 +16,8 @@ import com.lacunasoftware.demo.api.dto.StartEnrollmentRequestDTO;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions/enrollment")
-public class EnrollmentController {
+@RequestMapping("sample-api/sessions/enrollment")
+public class SampleEnrollmentController {
 
     @Autowired
     private Util util;

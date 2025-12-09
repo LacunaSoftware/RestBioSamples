@@ -16,8 +16,8 @@ import com.lacunasoftware.demo.api.dto.BioSubjectReferenceDTO;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions/authentication")
-public class AuthenticationController {
+@RequestMapping("sample-api/sessions/authentication")
+public class SampleAuthenticationController {
 
 	@Autowired
 	private Util util;
@@ -26,7 +26,7 @@ public class AuthenticationController {
 		return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
 	}
 
-	@PostMapping
+	@PostMapping()
 	public ResponseEntity<StartBioSessionResponse> start(@RequestBody BioSubjectReferenceDTO subject)
 			throws Exception {
 		if (subject.getIdentifier() == null || subject.getIdentifier().trim().isEmpty()) {

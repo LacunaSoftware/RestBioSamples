@@ -22,12 +22,12 @@
 		async function livenessTest() {
 			let widget = RestPkiWidget.init();
 
-			fetch("/api/bio/sessions/liveness", {
+			fetch("/sample-api/sessions/liveness", {
 				method: "POST",
 			}).then(async (response) => {
 				let sessionInfo = await response.json();
 				let result = await widget.performBioSession(sessionInfo.sessionUrl);
-				fetch("/api/bio/sessions/liveness/completion", {
+				fetch("/sample-api/sessions/liveness/completion", {
 					method: "POST",
 					body: JSON.stringify({
 						ticket: result.completeTicket
@@ -56,7 +56,7 @@
 				return;
 			}
 
-			fetch("/api/bio/sessions/enrollment", {
+			fetch("/sample-api/sessions/enrollment", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -71,7 +71,7 @@
 				}
 				let sessionInfo = await response.json();
 				let result = await widget.performBioSession(sessionInfo.sessionUrl);
-				fetch("/api/bio/sessions/enrollment/completion", {
+				fetch("/sample-api/sessions/enrollment/completion", {
 					method: "POST",
 					body: JSON.stringify({
 						ticket: result.completeTicket
@@ -100,7 +100,7 @@
 				return;
 			}
 
-			fetch("/api/bio/sessions/authentication", {
+			fetch("/sample-api/sessions/authentication", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json"
@@ -115,7 +115,7 @@
 				}
 				let sessionInfo = await response.json();
 				let result = await widget.performBioSession(sessionInfo.sessionUrl);
-				fetch("/api/bio/sessions/authentication/completion", {
+				fetch("/sample-api/sessions/authentication/completion", {
 					method: "POST",
 					body: JSON.stringify({
 						ticket: result.completeTicket
@@ -141,7 +141,7 @@
 	<a onclick="enrollmentTest()" href="#">Enrollment Test</a><br><br>
 	<a onclick="authenticationTest()" href="#">Authentication Test</a>
 	<br><br>
-	<h3>Response:</h3>
+	<h3>Result:</h3>
 	<textarea id="responseArea" style="width: 30%; height: 250px;"></textarea>
 </body>
 

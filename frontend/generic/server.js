@@ -8,8 +8,8 @@ app.get('/', (req, res) => {
 	res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.use('/api', createProxyMiddleware({
-	target: 'http://localhost:5078/api',
+app.use('/sample-api', createProxyMiddleware({
+	target: 'http://localhost:5078/sample-api',
 	changeOrigin: true,
 }));
 

@@ -8,7 +8,7 @@ using RestBioAspNetCoreSample.Configuration;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/api/bio/sessions")]
+	[Route("/sample-api/sessions")]
 	public class SessionsController(
 
 		IRestBioService restBioService,
