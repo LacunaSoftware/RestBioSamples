@@ -16,7 +16,7 @@ import com.lacunasoftware.demo.api.dto.StartEnrollmentRequestDTO;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions")
+@RequestMapping("api/bio/sessions/enrollment")
 public class EnrollmentController {
 
     @Autowired
@@ -26,8 +26,8 @@ public class EnrollmentController {
         return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
     }
 
-    @PostMapping("enrollment")
-    public ResponseEntity<StartBioSessionResponse> enrollmentExample(@RequestBody StartEnrollmentRequestDTO requestDTO) throws Exception {
+    @PostMapping
+    public ResponseEntity<StartBioSessionResponse> start(@RequestBody StartEnrollmentRequestDTO requestDTO) throws Exception {
 
         if (requestDTO.getSubjectIdentifier() == null || requestDTO.getSubjectIdentifier().trim().isEmpty()) {
             return ResponseEntity.badRequest().build();
@@ -47,21 +47,21 @@ public class EnrollmentController {
             request.setDangerousOverrideIfAlreadyEnrolled(requestDTO.getDangerousOverrideIfAlreadyEnrolled());
         }
 
-        StartBioSessionResponse bioEnrollmentSessionResponse = service.StartEnrollmentSessionAsync(request);
+        StartBioSessionResponse bioEnrollmentSessionResponse = service.StartEnrollmentSession(request);
         return ResponseEntity.ok(bioEnrollmentSessionResponse);
     }
 
-    @GetMapping("enrollment/status")
-    public ResponseEntity<BioEnrollmentSessionStatusModel> startEnrollmentSession(@RequestParam UUID sessionId) throws Exception {
+    @GetMapping("status")
+    public ResponseEntity<BioEnrollmentSessionStatusModel> getStatus(@RequestParam UUID sessionId) throws Exception {
         RestBioService service = getService();
-        BioEnrollmentSessionStatusModel status = service.GetEnrollmentSessionStatusAsync(sessionId);
+        BioEnrollmentSessionStatusModel status = service.GetEnrollmentSessionStatus(sessionId);
         return ResponseEntity.ok(status);
     }
 
-    @PostMapping("enrollment/completion")
-    public ResponseEntity<BioEnrollmentSessionStatusModel> completeLivenessSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
+    @PostMapping("completion")
+    public ResponseEntity<BioEnrollmentSessionStatusModel> complete(@RequestBody CompleteBioSessionRequest request) throws Exception {
         RestBioService service = getService();
-        BioEnrollmentSessionStatusModel result = service.CompleteEnrollmentSessionAsync(request.getTicket());
+        BioEnrollmentSessionStatusModel result = service.CompleteEnrollmentSession(request.getTicket());
         return ResponseEntity.ok(result);
     }
 

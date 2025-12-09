@@ -15,7 +15,7 @@ import com.lacunasoftware.demo.Util;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions")
+@RequestMapping("api/bio/sessions/liveness")
 public class LivenessController {
 
     @Autowired
@@ -25,8 +25,8 @@ public class LivenessController {
         return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
     }
 
-    @PostMapping("liveness")
-    public ResponseEntity<StartBioSessionResponse> livenessExample() throws Exception {
+    @PostMapping
+    public ResponseEntity<StartBioSessionResponse> start() throws Exception {
         RestBioService service = getService();
 
         StartLivenessSessionRequest request = new StartLivenessSessionRequest();
@@ -45,16 +45,16 @@ public class LivenessController {
         return ResponseEntity.ok(bioSessionResponse);
     }
 
-    @GetMapping("liveness/status")
-    public ResponseEntity<LivenessSessionStatusModel> livenessSessionStatus(@RequestParam UUID sessionId)
+    @GetMapping("status")
+    public ResponseEntity<LivenessSessionStatusModel> getStatus(@RequestParam UUID sessionId)
             throws Exception {
         RestBioService service = getService();
         LivenessSessionStatusModel status = service.GetLivenessSessionStatus(sessionId);
         return ResponseEntity.ok(status);
     }
 
-    @PostMapping("liveness/completion")
-    public ResponseEntity<LivenessSessionStatusModel> completeLivenessSession(
+    @PostMapping("completion")
+    public ResponseEntity<LivenessSessionStatusModel> complete(
             @RequestBody CompleteBioSessionRequest request) throws Exception {
         RestBioService service = getService();
         LivenessSessionStatusModel result = service.CompleteLivenessSession(request.getTicket());

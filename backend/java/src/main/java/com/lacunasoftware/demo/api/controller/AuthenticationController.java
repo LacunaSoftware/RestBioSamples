@@ -16,54 +16,54 @@ import com.lacunasoftware.demo.api.dto.BioSubjectReferenceDTO;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions")
+@RequestMapping("api/bio/sessions/authentication")
 public class AuthenticationController {
 
-    @Autowired
-    private Util util;
+	@Autowired
+	private Util util;
 
-    private RestBioService getService() {
-        return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
-    }
+	private RestBioService getService() {
+		return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
+	}
 
-    @PostMapping("authentication")
-    public ResponseEntity<StartBioSessionResponse> authenticationExample(@RequestBody BioSubjectReferenceDTO subject)
-            throws Exception {
-        if (subject.getIdentifier() == null || subject.getIdentifier().trim().isEmpty()) {
-            return ResponseEntity.badRequest().build();
-        }
+	@PostMapping
+	public ResponseEntity<StartBioSessionResponse> start(@RequestBody BioSubjectReferenceDTO subject)
+			throws Exception {
+		if (subject.getIdentifier() == null || subject.getIdentifier().trim().isEmpty()) {
+			return ResponseEntity.badRequest().build();
+		}
 
-        RestBioService service = getService();
-        StartBioAuthenticationSessionRequest request = new StartBioAuthenticationSessionRequest();
+		RestBioService service = getService();
+		StartBioAuthenticationSessionRequest request = new StartBioAuthenticationSessionRequest();
 
-        String identifierString = subject.getIdentifier().trim();
-        BioSubjectModel model = service.GetSubjectByIdentifierAsync(identifierString);
+		String identifierString = subject.getIdentifier().trim();
+		BioSubjectModel model = service.GetSubjectByIdentifier(identifierString);
 
-        BioSubjectReference bioSubject = new BioSubjectReference();
-        bioSubject.setId(model.getId());
-        bioSubject.setIdentifier(model.getIdentifier());
+		BioSubjectReference bioSubject = new BioSubjectReference();
+		bioSubject.setId(model.getId());
+		bioSubject.setIdentifier(model.getIdentifier());
 
-        request.setSubject(bioSubject);
-        request.setTrustedOrigin("http://localhost:4200/");
+		request.setSubject(bioSubject);
+		request.setTrustedOrigin("http://localhost:4200/");
 
-        StartBioSessionResponse bioAuthenticationSessionResponse = service.StartAuthenticationSessionAsync(request);
-        return ResponseEntity.ok(bioAuthenticationSessionResponse);
-    }
+		StartBioSessionResponse bioAuthenticationSessionResponse = service.StartAuthenticationSession(request);
+		return ResponseEntity.ok(bioAuthenticationSessionResponse);
+	}
 
-    @GetMapping("authentication/status")
-    public ResponseEntity<BioAuthenticationSessionStatusModel> startAuthenticantionSession(@RequestParam UUID sessionId)
-            throws Exception {
-        RestBioService service = getService();
-        BioAuthenticationSessionStatusModel status = service.GetAuthenticationSessionStatusAsync(sessionId);
-        return ResponseEntity.ok(status);
-    }
+	@GetMapping("status")
+	public ResponseEntity<BioAuthenticationSessionStatusModel> getStatus(
+			@RequestParam UUID sessionId) throws Exception {
+		RestBioService service = getService();
+		BioAuthenticationSessionStatusModel status = service.GetAuthenticationSessionStatus(sessionId);
+		return ResponseEntity.ok(status);
+	}
 
-    @PostMapping("authentication/completion")
-    public ResponseEntity<BioAuthenticationSessionStatusModel> completeAuthenticantionSession(
-            @RequestBody CompleteBioSessionRequest request) throws Exception {
-        RestBioService service = getService();
-        BioAuthenticationSessionStatusModel result = service.CompleteAuthenticationSessionAsync(request.getTicket());
-        return ResponseEntity.ok(result);
-    }
+	@PostMapping("completion")
+	public ResponseEntity<BioAuthenticationSessionStatusModel> complete(
+			@RequestBody CompleteBioSessionRequest request) throws Exception {
+		RestBioService service = getService();
+		BioAuthenticationSessionStatusModel result = service.CompleteAuthenticationSession(request.getTicket());
+		return ResponseEntity.ok(result);
+	}
 
 }

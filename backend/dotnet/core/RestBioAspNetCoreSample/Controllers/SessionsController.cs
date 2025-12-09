@@ -299,47 +299,5 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			return response;
 		}
-
-		[HttpPost("id-capture/completion")]
-		public async Task<IdentificationDocumentCaptureSessionStatusModel> CompleteIdentificationDocumentCaptureSessionAsync(CompleteBioSessionRequest request) {
-
-			// This is an example of how to complete an identification document capture session.
-			// You must implement your own security measures to ensure that only users
-			// you want to have access to this endpoint can call it.
-
-			// By calling the following endpoint, you will get the final status of the
-			// biometric session.
-
-			var result = await restBioService.CompleteIdentificationDocumentCaptureSessionAsync(request.Ticket);
-
-			// Available properties of the result:
-			var sessionId = result.SessionId;       // The ID of the session.
-
-			// ID document capture specific properties (the exact properties may vary based on the actual model structure):
-			// Note: The properties below are based on the liveness model and may need adjustment for ID capture
-			// You should verify the actual properties available in IdentificationDocumentCaptureSessionStatusModel
-
-			var success = result.Success;           // Whether the biometric session was successful or not.
-
-			if (success == true) {
-				// The biometric session was successful and the ID document was captured.
-
-			} else if (success == false) {
-				// The biometric session was completed, but document capture failed.
-				// Here you may want to retry or provide guidance to the user.
-
-			} else {
-				// The biometric session is still in progress. This should not happen here,
-				// as the Widget will only provide a complete ticket when the session is completed
-				// (either successfully or not).
-			}
-
-			return result;
-		}
-
-		[HttpGet("id-capture/status")]
-		public async Task<IdentificationDocumentCaptureSessionStatusModel> GetIdentificationDocumentCaptureSessionStatusAsync(Guid sessionId) {
-			return await restBioService.GetIdentificationDocumentCaptureSessionStatusAsync(sessionId);
-		}
 	}
 }
