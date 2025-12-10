@@ -62,48 +62,46 @@ export class RestBioService {
 
 	// Implemented backend endpoints (only liveness for now)
 	startLivenessSession(captureIdentificationDocument = false): Observable<StartBioSessionResponse> {
-		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/liveness?captureIdentificationDocument=${captureIdentificationDocument}`, {});
+		return this.http.post<StartBioSessionResponse>(`/sample-api/sessions/liveness?captureIdentificationDocument=${captureIdentificationDocument}`, {});
 	}
 
 	completeLivenessSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/liveness/completion`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/sample-api/sessions/liveness/completion`, body);
 	}
 
 	// Enrollment session endpoints
 	startEnrollmentSession(subjectIdentifier: string, captureIdentificationDocument?: boolean, dangerousOverrideIfAlreadyEnrolled?: boolean): Observable<StartBioSessionResponse> {
-		const params = new URLSearchParams();
-		params.append('subjectIdentifier', subjectIdentifier);
+		const body: any = {
+			subjectIdentifier: subjectIdentifier
+		};
+		
 		if (captureIdentificationDocument !== undefined) {
-			params.append('captureIdentificationDocument', captureIdentificationDocument.toString());
+			body.captureIdentificationDocument = captureIdentificationDocument;
 		}
+		
 		if (dangerousOverrideIfAlreadyEnrolled !== undefined) {
-			params.append('dangerousOverrideIfAlreadyEnrolled', dangerousOverrideIfAlreadyEnrolled.toString());
+			body.dangerousOverrideIfAlreadyEnrolled = dangerousOverrideIfAlreadyEnrolled;
 		}
-		const queryString = params.toString();
-		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/enrollment?${queryString}`, {});
+		
+		return this.http.post<StartBioSessionResponse>(`/sample-api/sessions/enrollment`, body);
 	}
 
 	getEnrollmentSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/sessions/enrollment/status?sessionId=${encodeURIComponent(sessionId)}`);
+		return this.http.get(`/sample-api/sessions/enrollment/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeEnrollmentSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/sessions/enrollment/completion`, body);
+		return this.http.post<CompleteBioSessionResponse>(`/sample-api/sessions/enrollment/completion`, body);
 	}
 
 	// Authentication session endpoints
 	startAuthenticationSession(bioSubjectReference: BioSubjectReference): Observable<StartBioSessionResponse> {
-		const params = new URLSearchParams();
-		if (bioSubjectReference.id) {
-			params.append('bioSubjectReference.id', bioSubjectReference.id);
-		}
-		if (bioSubjectReference.identifier) {
-			params.append('bioSubjectReference.identifier', bioSubjectReference.identifier);
-		}
-		const queryString = params.toString();
-		return this.http.post<StartBioSessionResponse>(`/api/bio/sessions/authentication?${queryString}`, {});
+		return this.http.post<StartBioSessionResponse>(
+			`/sample-api/sessions/authentication`,
+			bioSubjectReference
+		);
 	}
 
 	enrollment2d(subjectIdentifier: string, image: string): Observable<BioSubjectEnrollmentResponse> {
@@ -130,30 +128,16 @@ export class RestBioService {
 	}
 
 	getAuthenticationSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/authentication/status?sessionId=${encodeURIComponent(sessionId)}`);
+		return this.http.get(`/sample-api/sessions/authentication/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 
 	completeAuthenticationSession(ticket: string): Observable<CompleteBioSessionResponse> {
 		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/authentication/completion`, body);
-	}
-
-	// Identification Document Capture session endpoints
-	startIdentificationDocumentCaptureSession(): Observable<StartBioSessionResponse> {
-		return this.http.post<StartBioSessionResponse>(`/api/bio/session/id-capture`, {});
-	}
-
-	getIdentificationDocumentCaptureStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/id-capture/status?sessionId=${encodeURIComponent(sessionId)}`);
+		return this.http.post<CompleteBioSessionResponse>(`/sample-api/sessions/authentication/completion`, body);
 	}
 
 	getLivenessSessionStatus(sessionId: string): Observable<any> {
-		return this.http.get(`/api/bio/session/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
-	}
-
-	completeIdentificationDocumentCaptureSession(ticket: string): Observable<CompleteBioSessionResponse> {
-		const body: CompleteBioSessionRequest = { ticket };
-		return this.http.post<CompleteBioSessionResponse>(`/api/bio/session/id-capture/completion`, body);
+		return this.http.get(`/sample-api/sessions/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
 	}
 }
 

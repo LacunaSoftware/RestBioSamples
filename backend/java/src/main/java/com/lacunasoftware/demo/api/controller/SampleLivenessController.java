@@ -15,45 +15,47 @@ import com.lacunasoftware.demo.Util;
 import com.lacunasoftware.restpkicore.*;
 
 @RestController
-@RequestMapping("api/bio/sessions")
-public class LivenessController {
+@RequestMapping("sample-api/sessions/liveness")
+public class SampleLivenessController {
 
-	@Autowired
-	private Util util;
+    @Autowired
+    private Util util;
 
     private RestBioService getService() {
-		return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
+        return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
     }
 
-    @PostMapping("liveness")
-    public ResponseEntity<StartBioSessionResponse> livenessExample() throws Exception {
+    @PostMapping
+    public ResponseEntity<StartBioSessionResponse> start() throws Exception {
         RestBioService service = getService();
 
         StartLivenessSessionRequest request = new StartLivenessSessionRequest();
 
-		// Here you can set the subjectIdentifier and trustedOrigin properties
-		// according to your application's needs. In this example, we are just
-		// setting some static values.
+        // Here you can set the subjectIdentifier and trustedOrigin properties
+        // according to your application's needs. In this example, we are just
+        // setting some static values.
         request.setSubjectIdentifier("f6bf3b8f-726f-4dad-b544-173862dc1223");
 
-		// On our example, all frontends are served from this origin. Change it to your
-		// application's origin. (maybe you want to set it dynamically according to the
-		// request/client).
+        // On our example, all frontends are served from this origin. Change it to your
+        // application's origin. (maybe you want to set it dynamically according to the
+        // request/client).
         request.setTrustedOrigin("http://localhost:4200/");
 
         StartBioSessionResponse bioSessionResponse = service.StartLivenessSession(request);
         return ResponseEntity.ok(bioSessionResponse);
     }
 
-    @GetMapping("liveness/status")
-    public ResponseEntity<LivenessSessionStatusModel> livenessSessionStatus(@RequestParam UUID sessionId) throws Exception {
+    @GetMapping("status")
+    public ResponseEntity<LivenessSessionStatusModel> getStatus(@RequestParam UUID sessionId)
+            throws Exception {
         RestBioService service = getService();
         LivenessSessionStatusModel status = service.GetLivenessSessionStatus(sessionId);
         return ResponseEntity.ok(status);
     }
 
-    @PostMapping("liveness/completion")
-    public ResponseEntity<LivenessSessionStatusModel> completeLivenessSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
+    @PostMapping("completion")
+    public ResponseEntity<LivenessSessionStatusModel> complete(
+            @RequestBody CompleteBioSessionRequest request) throws Exception {
         RestBioService service = getService();
         LivenessSessionStatusModel result = service.CompleteLivenessSession(request.getTicket());
         return ResponseEntity.ok(result);

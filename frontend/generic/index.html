@@ -15,15 +15,19 @@
 	<h1>RestPkiWidget - Bio Session Demo</h1>
 	<script>
 
+		function displayResponse(data) {
+			document.getElementById('responseArea').value = JSON.stringify(data, null, 2);
+		}
+
 		async function livenessTest() {
 			let widget = RestPkiWidget.init();
 
-			fetch("/api/bio/sessions/liveness", {
+			fetch("/sample-api/sessions/liveness", {
 				method: "POST",
 			}).then(async (response) => {
 				let sessionInfo = await response.json();
 				let result = await widget.performBioSession(sessionInfo.sessionUrl);
-				fetch("/api/bio/sessions/liveness/completion", {
+				fetch("/sample-api/sessions/liveness/completion", {
 					method: "POST",
 					body: JSON.stringify({
 						ticket: result.completeTicket
@@ -33,13 +37,112 @@
 					}
 				}).then(async (response) => {
 					let completionResult = await response.json();
+					displayResponse(completionResult);
 					console.log(completionResult);
 				});
+			}).catch(error => {
+				console.error('Error:', error);
+				alert('Liveness error!');
+			});
+		}
+
+		async function enrollmentTest() {
+			let widget = RestPkiWidget.init();
+
+			let subjectId = document.getElementById('subjectId')?.value;
+
+			if (!subjectId || subjectId.trim() === '') {
+				alert('Please enter the Subject Identifier for enrollment!');
+				return;
+			}
+
+			fetch("/sample-api/sessions/enrollment", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					subjectIdentifier: subjectId
+				})
+			}).then(async (response) => {
+				if (!response.ok) {
+					alert('Error: already registered!');
+					return;
+				}
+				let sessionInfo = await response.json();
+				let result = await widget.performBioSession(sessionInfo.sessionUrl);
+				fetch("/sample-api/sessions/enrollment/completion", {
+					method: "POST",
+					body: JSON.stringify({
+						ticket: result.completeTicket
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}).then(async (response) => {
+					let completionResult = await response.json();
+					displayResponse(completionResult);
+					console.log(completionResult);
+				});
+			}).catch(error => {
+				console.error('Error:', error);
+				alert('Enrollment error!');
+			});
+		}
+
+		async function authenticationTest() {
+			let widget = RestPkiWidget.init();
+
+			let subjectId = document.getElementById('subjectId')?.value;
+
+			if (!subjectId || subjectId.trim() === '') {
+				alert('Please enter the Subject Identifier!');
+				return;
+			}
+
+			fetch("/sample-api/sessions/authentication", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					identifier: subjectId
+				})
+			}).then(async (response) => {
+				if (!response.ok) {
+					alert('Error: Subject not found or not registered!');
+					return;
+				}
+				let sessionInfo = await response.json();
+				let result = await widget.performBioSession(sessionInfo.sessionUrl);
+				fetch("/sample-api/sessions/authentication/completion", {
+					method: "POST",
+					body: JSON.stringify({
+						ticket: result.completeTicket
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}).then(async (response) => {
+					let completionResult = await response.json();
+					displayResponse(completionResult);
+					console.log(completionResult);
+				});
+			}).catch(error => {
+				console.error('Error:', error);
+				alert('Authentication error!');
 			});
 		}
 
 	</script>
-	<a onclick="livenessTest()" href="#">Liveness Test</a>
+	<input type="text" id="subjectId" placeholder="Subject Identifier">
+	<br><br>
+	<a onclick="livenessTest()" href="#">Liveness Test</a><br><br>
+	<a onclick="enrollmentTest()" href="#">Enrollment Test</a><br><br>
+	<a onclick="authenticationTest()" href="#">Authentication Test</a>
+	<br><br>
+	<h3>Result:</h3>
+	<textarea id="responseArea" style="width: 30%; height: 250px;"></textarea>
 </body>
 
 </html>

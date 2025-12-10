@@ -12,7 +12,7 @@ import { Router, RouterOutlet } from '@angular/router';
 export class AppComponent {
 	title = 'Bio Sessions';
 
-	sessionTypes: string[] = ['Liveness', 'Enrollment', 'Enrollment2d', 'Authentication', 'Authentication2d', 'IdentificationDocumentCapture'];
+	sessionTypes: string[] = ['Liveness', 'Enrollment', 'Enrollment2d', 'Authentication', 'Authentication2d'];
 
 	constructor(private router: Router) { }
 
@@ -23,7 +23,6 @@ export class AppComponent {
 			'Enrollment2d': '/enrollment-2d',
 			'Authentication': '/authentication',
 			'Authentication2d': '/authentication-2d',
-			'IdentificationDocumentCapture': '/identification-document-capture'
 		};
 		this.router.navigate([routeMap[type]]);
 	}
