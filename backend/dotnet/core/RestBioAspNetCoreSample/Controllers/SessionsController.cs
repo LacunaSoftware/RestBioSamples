@@ -306,18 +306,18 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return await restBioService.IdentifyAsync(request, subscriptionId);
 		}
 
-		[HttpPost("start-identification")]
+		[HttpPost("identification")]
 		public async Task<BioIdentificationStatusModel> StartIdentificationAsync(BioIdentificationRequest request, Guid? subscriptionId = null) {
 			return await restBioService.StartIdentificationAsync(request, subscriptionId);
 		}
 
-		[HttpPost("identification-status")]
-		public async Task<BioIdentificationStatusModel> StartIdentificationAsync(string param) {
-			if (Guid.TryParse(param, out var result)) {
+		[HttpGet("identification/status")]
+		public async Task<BioIdentificationStatusModel> GetIdentificationSessionStatusAsync(string ticket) {
+			if (Guid.TryParse(ticket, out var result)) {
 				return await restBioService.GetIdentificationStatusAsync(result);
 			}
 
-			return await restBioService.GetIdentificationStatusAsync(param);
+			return await restBioService.GetIdentificationStatusAsync(ticket);
 
 		}
 

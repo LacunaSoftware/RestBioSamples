@@ -56,6 +56,30 @@ export interface BioSubjectAuthenticationResponse {
 	success: boolean;
 }
 
+export interface BioIdentificationRequest {
+	faceImage?: BlobModel;
+	subject: {
+		identifier?: string;
+		id?: string;
+	};
+}
+
+export interface BioIdentificationResponse {
+	identificationId: string;
+	success: boolean;
+	result?: {
+		identifiedSubjectId: string;
+		identifiedSubjectIdentifier: string;
+	};
+}
+
+export interface BioIdentificationStatusModel {
+	identificationId: string;
+	completed: boolean;
+	queryUrl: string;
+	response: BioIdentificationResponse;
+}
+
 @Injectable({ providedIn: 'root' })
 export class RestBioService {
 	private readonly http = inject(HttpClient);
@@ -138,6 +162,30 @@ export class RestBioService {
 
 	getLivenessSessionStatus(sessionId: string): Observable<any> {
 		return this.http.get(`/sample-api/sessions/liveness/status?sessionId=${encodeURIComponent(sessionId)}`);
+	}
+
+	identification2d(subjectIdentifier: string, image: string): Observable<BioIdentificationResponse> {
+		const body: BioIdentificationRequest = {
+			subject: {
+				identifier: subjectIdentifier,
+			},
+			faceImage: {
+				content: image,
+				contentType: "image/jpeg"
+			}
+		};
+		return this.http.post<BioIdentificationResponse>(`/sample-api/sessions/identification2d`, body);
+	}
+
+	startIdentificationSession(bioIdentificationRequest: BioIdentificationRequest): Observable<BioIdentificationResponse> {
+		return this.http.post<BioIdentificationResponse>(
+			`/sample-api/sessions/identification`,
+			bioIdentificationRequest
+		);
+	}
+
+	getIdentificationSessionStatus(ticket: string): Observable<any> {
+		return this.http.get(`/sample-api/sessions/identification/status?ticket=${encodeURIComponent(ticket)}`);
 	}
 }
 
