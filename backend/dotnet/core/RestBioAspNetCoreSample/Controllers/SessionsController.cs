@@ -1,11 +1,13 @@
 ﻿using Lacuna.RestPki.Api.Bio;
+using Lacuna.RestPki.Api.Bio.Identifications;
 using Lacuna.RestPki.Api.Bio.Sessions;
 using Lacuna.RestPki.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using RestBioAspNetCoreSample.Configuration;
 
-namespace RestBioAspNetCoreSample.Controllers {
+namespace RestBioAspNetCoreSample.Controllers
+{
 
 	[ApiController]
 	[Route("/sample-api/sessions")]
@@ -14,10 +16,12 @@ namespace RestBioAspNetCoreSample.Controllers {
 		IRestBioService restBioService,
 		IOptions<ExampleConfig> exampleConfig
 
-	) : ControllerBase {
+	) : ControllerBase
+	{
 
 		[HttpPost("liveness")]
-		public async Task<StartBioSessionResponse> StartLivenessSessionAsync([FromQuery] bool captureIdentificationDocument = false) {
+		public async Task<StartBioSessionResponse> StartLivenessSessionAsync([FromQuery] bool captureIdentificationDocument = false)
+		{
 
 			// This is an example of how to start a liveness session.
 			// You must implement your own security measures to ensure that only users
@@ -26,7 +30,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 			// The response of the following call contains the session URL that
 			// will be loaded in the Widget to start the biometric session.
 
-			var response = await restBioService.StartLivenessSessionAsync(new() {
+			var response = await restBioService.StartLivenessSessionAsync(new()
+			{
 				TrustedOrigin = exampleConfig.Value.TrustedOrigin,
 				CaptureIdentificationDocument = captureIdentificationDocument,
 				SubjectIdentifier = "Example",
@@ -50,7 +55,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("liveness/completion")]
-		public async Task<LivenessSessionStatusModel> CompleteLivenessSessionAsync(CompleteBioSessionRequest request) {
+		public async Task<LivenessSessionStatusModel> CompleteLivenessSessionAsync(CompleteBioSessionRequest request)
+		{
 
 			// This is an example of how to complete a liveness session.
 			// You must implement your own security measures to ensure that only users
@@ -68,17 +74,20 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			// If you called the session with CaptureIdentificationDocument = true,
 			// you can also check if the user captured an ID document:
-			if (result.IdCaptureStatus != null) {
+			if (result.IdCaptureStatus != null)
+			{
 				_ = result.IdCaptureStatus.Success;     // Whether the user captured an ID document.
 				_ = result.IdCaptureStatus.MatchedFace; // Whether the face on the ID document matched the user's face.
 			}
 
 			var success = result.Success;           // Whether the biometric session was successful or not.
 
-			if (success == true) {
+			if (success == true)
+			{
 				// The biometric session was successful and the user passed the liveness test.
 
-				if (result.ResultDataAvailable) {
+				if (result.ResultDataAvailable)
+				{
 					// When the session has ResultDataAvailable = true, it means that
 					// you can now retrieve the images captured during the session.
 
@@ -99,11 +108,15 @@ namespace RestBioAspNetCoreSample.Controllers {
 					_ = resultData.DocumentData?.BackImage?.ContentType;    // The content type of the back side image (e.g. "image/jpeg") (may be null)
 				}
 
-			} else if (success == false) {
+			}
+			else if (success == false)
+			{
 				// The biometric session was completed, but it was not successfull.
 				// Here you may want to retry or increase an attempt counter of the user.
 
-			} else {
+			}
+			else
+			{
 				// The biometric session is still in progress. This should not happen here,
 				// as the Widget will only provide a complete ticket when the session is completed
 				// (either successfully or not).
@@ -113,7 +126,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpGet("liveness/status")]
-		public async Task<BioSessionResultDataModel> GetLivenessSessionStatusAsync(Guid sessionId) {
+		public async Task<BioSessionResultDataModel> GetLivenessSessionStatusAsync(Guid sessionId)
+		{
 			return await restBioService.GetSessionResultDataAsync(sessionId);
 		}
 
@@ -122,7 +136,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 			[FromQuery] string subjectIdentifier,
 			[FromQuery] bool? captureIdentificationDocument = false,
 			[FromQuery] bool? dangerousOverrideIfAlreadyEnrolled = false
-		) {
+		)
+		{
 
 			// This is an example of how to start an enrollment session.
 			// You must implement your own security measures to ensure that only users
@@ -131,7 +146,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 			// The response of the following call contains the session URL that
 			// will be loaded in the Widget to start the biometric session.
 
-			var response = await restBioService.StartEnrollmentSessionAsync(new() {
+			var response = await restBioService.StartEnrollmentSessionAsync(new()
+			{
 				TrustedOrigin = exampleConfig.Value.TrustedOrigin,
 				SubjectIdentifier = subjectIdentifier,
 				// Additional properties for enrollment:
@@ -156,7 +172,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("enrollment/completion")]
-		public async Task<BioEnrollmentSessionStatusModel> CompleteEnrollmentSessionAsync(CompleteBioSessionRequest request) {
+		public async Task<BioEnrollmentSessionStatusModel> CompleteEnrollmentSessionAsync(CompleteBioSessionRequest request)
+		{
 
 			// This is an example of how to complete an enrollment session.
 			// You must implement your own security measures to ensure that only users
@@ -176,16 +193,21 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			var success = result.Success;           // Whether the biometric session was successful or not.
 
-			if (success == true) {
+			if (success == true)
+			{
 				// The biometric session was successful and the user was enrolled.
 
 				// You may want to store SubjectID to be used later
 				_ = result.SubjectId;
-			} else if (success == false) {
+			}
+			else if (success == false)
+			{
 				// The biometric session was completed, but it was not successful.
 				// Here you may want to retry or increase an attempt counter of the user.
 
-			} else {
+			}
+			else
+			{
 				// The biometric session is still in progress. This should not happen here,
 				// as the Widget will only provide a complete ticket when the session is completed
 				// (either successfully or not).
@@ -195,12 +217,14 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpGet("enrollment/status")]
-		public async Task<BioEnrollmentSessionStatusModel> GetEnrollmentSessionStatusAsync(Guid sessionId) {
+		public async Task<BioEnrollmentSessionStatusModel> GetEnrollmentSessionStatusAsync(Guid sessionId)
+		{
 			return await restBioService.GetEnrollmentSessionStatusAsync(sessionId);
 		}
 
 		[HttpPost("authentication")]
-		public async Task<StartBioSessionResponse> StartAuthenticationSessionAsync([FromQuery] BioSubjectReference bioSubjectReference) {
+		public async Task<StartBioSessionResponse> StartAuthenticationSessionAsync([FromQuery] BioSubjectReference bioSubjectReference)
+		{
 
 			// This is an example of how to start an authentication session.
 			// You must implement your own security measures to ensure that only users
@@ -209,7 +233,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 			// The response of the following call contains the session URL that
 			// will be loaded in the Widget to start the biometric session.
 
-			var response = await restBioService.StartAuthenticationSessionAsync(new() {
+			var response = await restBioService.StartAuthenticationSessionAsync(new()
+			{
 				TrustedOrigin = exampleConfig.Value.TrustedOrigin,
 				Subject = bioSubjectReference,
 				// additional options for authenticationSession
@@ -231,7 +256,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("authentication/completion")]
-		public async Task<BioAuthenticationSessionStatusModel> CompleteAuthenticationSessionAsync(CompleteBioSessionRequest request) {
+		public async Task<BioAuthenticationSessionStatusModel> CompleteAuthenticationSessionAsync(CompleteBioSessionRequest request)
+		{
 
 			// This is an example of how to complete an authentication session.
 			// You must implement your own security measures to ensure that only users
@@ -251,14 +277,19 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			var success = result.Success;           // Whether the biometric session was successful or not.
 
-			if (success == true) {
+			if (success == true)
+			{
 				// The biometric session was successful and the user was authenticated.
 
-			} else if (success == false) {
+			}
+			else if (success == false)
+			{
 				// The biometric session was completed, but authentication failed.
 				// Here you may want to retry, lock the account, or implement other security measures.
 
-			} else {
+			}
+			else
+			{
 				// The biometric session is still in progress. This should not happen here,
 				// as the Widget will only provide a complete ticket when the session is completed
 				// (either successfully or not).
@@ -268,7 +299,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 		}
 
 		[HttpPost("id-capture")]
-		public async Task<StartBioSessionResponse> StartIdentificationDocumentCaptureSessionAsync() {
+		public async Task<StartBioSessionResponse> StartIdentificationDocumentCaptureSessionAsync()
+		{
 
 			// This is an example of how to start an identification document capture session.
 			// You must implement your own security measures to ensure that only users
@@ -277,7 +309,8 @@ namespace RestBioAspNetCoreSample.Controllers {
 			// The response of the following call contains the session URL that
 			// will be loaded in the Widget to start the biometric session.
 
-			var response = await restBioService.StartIdentificationDocumentCaptureSessionAsync(new() {
+			var response = await restBioService.StartIdentificationDocumentCaptureSessionAsync(new()
+			{
 				TrustedOrigin = exampleConfig.Value.TrustedOrigin
 				// Additional properties for ID document capture:
 				// DocumentTypes = new[] { "passport", "driver_license", "national_id" }, // Optional: allowed document types
@@ -299,5 +332,31 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			return response;
 		}
-	}
+
+		[HttpPost("identification2d")]
+		public async Task<BioIdentificationResponse> Identification2DAsync(BioIdentificationRequest request, Guid? subscriptionId = null)
+		{
+			return await restBioService.IdentifyAsync(request, subscriptionId);
+		}
+
+        [HttpPost("start-identification")]
+        public async Task<BioIdentificationStatusModel> StartIdentification(BioIdentificationRequest request, Guid? subscriptionId = null)
+        {
+            return await restBioService.StartIdentificationAsync(request, subscriptionId);
+            
+        }
+
+        [HttpGet("{param}/identification-status")]
+        public async Task<BioIdentificationStatusModel> GetIdentificationStatus(string param)
+        {
+            if (Guid.TryParse(param, out var result))
+            {
+                return await restBioService.GetIdentificationStatusAsync(result);
+            }
+
+            return await restBioService.GetIdentificationStatusAsync(param);
+
+        }
+
+    }
 }
