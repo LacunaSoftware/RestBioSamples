@@ -2,7 +2,6 @@ package com.lacunasoftware.demo.api.controller;
 
 import java.util.UUID;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,9 +10,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lacunasoftware.demo.Util;
-import com.lacunasoftware.demo.api.dto.BioSubjectReferenceDTO;
-import com.lacunasoftware.restpkicore.*;
+import com.lacunasoftware.demo.config.ExampleConfigProperties;
+import com.lacunasoftware.restpkicore.BioAuthenticationSessionStatusModel;
+import com.lacunasoftware.restpkicore.BioSubjectReference;
+import com.lacunasoftware.restpkicore.CompleteBioSessionRequest;
+import com.lacunasoftware.restpkicore.RestBioService;
+import com.lacunasoftware.restpkicore.StartBioAuthenticationSessionRequest;
+import com.lacunasoftware.restpkicore.StartBioSessionResponse;
 
 @RestController
 @RequestMapping("sample-api/sessions/authentication")
@@ -32,42 +35,75 @@ public class SampleAuthenticationController {
 
 	@PostMapping()
 	public ResponseEntity<StartBioSessionResponse> StartAuthenticationSession(@RequestParam BioSubjectReference subject) throws Exception {
-			throws Exception {
-		if (subject.getIdentifier() == null || subject.getIdentifier().trim().isEmpty()) {
-			return ResponseEntity.badRequest().build();
-		}
 
-		RestBioService service = getService();
+		// This is an example of how to start an authentication session.
+		// You must implement your own security measures to ensure that only users
+		// you want to have access to this endpoint can call it.
+
+		// The response of the following call contains the session URL that
+		// will be loaded in the Widget to start the biometric session.
+
 		StartBioAuthenticationSessionRequest request = new StartBioAuthenticationSessionRequest();
+		request.setSubject(subject);
+		request.setTrustedOrigin(exampleConfig.getTrustedOrigin());
+		// Additional options for the authentication session:
+		// request.set(...)
 
-		String identifierString = subject.getIdentifier().trim();
-		BioSubjectModel model = service.GetSubjectByIdentifier(identifierString);
+		StartBioSessionResponse response = service.StartAuthenticationSession(request);
 
-		BioSubjectReference bioSubject = new BioSubjectReference();
-		bioSubject.setId(model.getId());
-		bioSubject.setIdentifier(model.getIdentifier());
+		// Although not mandatory, you may want to save the SessionId in your database
+		// along with your user/session information, as you can use this ID to retrieve
+		// the status of the session by later using the GetAuthenticationSessionStatus()
+		// method. But at the end of the session, the Widget will return you a ticket
+		// that you can use to retrieve the session status without needing to store
+		// the SessionId.
 
-		request.setSubject(bioSubject);
-		request.setTrustedOrigin("http://localhost:4200/");
+		// Available properties of the response:
+		// response.getSessionUrl()  - The URL to be loaded in the Widget to start the biometric session.
+		// response.getSessionId()   - The ID of the session.
+		// response.getSessionType() - The type of the session (Authentication).
 
-		StartBioSessionResponse bioAuthenticationSessionResponse = service.StartAuthenticationSession(request);
-		return ResponseEntity.ok(bioAuthenticationSessionResponse);
-	}
-
-	@GetMapping("status")
-	public ResponseEntity<BioAuthenticationSessionStatusModel> getStatus(
-			@RequestParam UUID sessionId) throws Exception {
-		RestBioService service = getService();
-		BioAuthenticationSessionStatusModel status = service.GetAuthenticationSessionStatus(sessionId);
-		return ResponseEntity.ok(status);
+		return ResponseEntity.ok(response);
 	}
 
 	@PostMapping("completion")
-	public ResponseEntity<BioAuthenticationSessionStatusModel> complete(
-			@RequestBody CompleteBioSessionRequest request) throws Exception {
-		RestBioService service = getService();
+	public ResponseEntity<BioAuthenticationSessionStatusModel> CompleteAuthenticationSession(@RequestBody CompleteBioSessionRequest request) throws Exception {
+
+		// This is an example of how to complete an authentication session.
+		// You must implement your own security measures to ensure that only users
+		// you want to have access to this endpoint can call it.
+
+		// By calling the following endpoint, you will get the final status of the
+		// biometric session.
+
 		BioAuthenticationSessionStatusModel result = service.CompleteAuthenticationSession(request.getTicket());
+
+		// Available properties of the result:
+		// result.getSessionId() - The ID of the session.
+		// result.isSuccess()    - Whether the biometric session was successful or not.
+
+		Boolean success = result.isSuccess();
+
+		if (Boolean.TRUE.equals(success)) {
+			// The biometric session was successful and the user was authenticated.
+
+		} else if (Boolean.FALSE.equals(success)) {
+			// The biometric session was completed, but authentication failed.
+			// Here you may want to retry, lock the account, or implement other security measures.
+
+		} else {
+			// The biometric session is still in progress. This should not happen here,
+			// as the Widget will only provide a complete ticket when the session is completed
+			// (either successfully or not).
+		}
+
 		return ResponseEntity.ok(result);
+	}
+
+	@GetMapping("status")
+	public ResponseEntity<BioAuthenticationSessionStatusModel> GetAuthenticationSessionStatus(@RequestParam UUID sessionId) throws Exception {
+		BioAuthenticationSessionStatusModel status = service.GetAuthenticationSessionStatus(sessionId);
+		return ResponseEntity.ok(status);
 	}
 
 }
