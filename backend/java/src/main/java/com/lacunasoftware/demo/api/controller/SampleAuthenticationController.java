@@ -31,7 +31,7 @@ public class SampleAuthenticationController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<StartBioSessionResponse> start(@RequestBody BioSubjectReferenceDTO subject)
+	public ResponseEntity<StartBioSessionResponse> StartAuthenticationSession(@RequestParam BioSubjectReference subject) throws Exception {
 			throws Exception {
 		if (subject.getIdentifier() == null || subject.getIdentifier().trim().isEmpty()) {
 			return ResponseEntity.badRequest().build();

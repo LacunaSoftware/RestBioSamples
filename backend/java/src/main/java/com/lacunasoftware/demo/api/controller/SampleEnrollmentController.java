@@ -31,7 +31,7 @@ public class SampleEnrollmentController {
 	}
 
     @PostMapping
-    public ResponseEntity<StartBioSessionResponse> start(@RequestBody StartEnrollmentRequestDTO requestDTO) throws Exception {
+	public ResponseEntity<StartBioSessionResponse> StartEnrollmentSession(
 
         if (requestDTO.getSubjectIdentifier() == null || requestDTO.getSubjectIdentifier().trim().isEmpty()) {
             return ResponseEntity.badRequest().build();
