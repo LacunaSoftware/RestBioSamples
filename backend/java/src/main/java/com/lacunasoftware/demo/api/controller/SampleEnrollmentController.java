@@ -19,12 +19,16 @@ import com.lacunasoftware.restpkicore.*;
 @RequestMapping("sample-api/sessions/enrollment")
 public class SampleEnrollmentController {
 
-    @Autowired
-    private Util util;
+	private final RestBioService service;
+	private final ExampleConfigProperties exampleConfig;
 
-    private RestBioService getService() {
-        return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
-    }
+	public SampleEnrollmentController(
+		RestBioService restBioService,
+		ExampleConfigProperties exampleConfig
+	) {
+		this.service = restBioService;
+		this.exampleConfig = exampleConfig;
+	}
 
     @PostMapping
     public ResponseEntity<StartBioSessionResponse> start(@RequestBody StartEnrollmentRequestDTO requestDTO) throws Exception {

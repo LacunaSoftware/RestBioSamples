@@ -18,11 +18,15 @@ import com.lacunasoftware.restpkicore.*;
 @RequestMapping("sample-api/sessions/liveness")
 public class SampleLivenessController {
 
-    @Autowired
-    private Util util;
+    private final RestBioService service;
+    private final ExampleConfigProperties exampleConfig;
 
-    private RestBioService getService() {
-        return RestBioServiceFactory.getService(util.getRestPkiCoreOptions());
+    public SampleLivenessController(
+        RestBioService restBioService, 
+        ExampleConfigProperties exampleConfig
+    ) {
+        this.service = restBioService;
+        this.exampleConfig = exampleConfig;
     }
 
     @PostMapping
