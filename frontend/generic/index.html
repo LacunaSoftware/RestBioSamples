@@ -56,15 +56,8 @@
 				return;
 			}
 
-			let params = new URLSearchParams({
-				subjectIdentifier: subjectId
-			});
-
-			fetch(`/sample-api/sessions/enrollment?${params}`, {
+			fetch(`/sample-api/sessions/enrollment?subjectIdentifier=${encodeURIComponent(subjectId)}`, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
 			}).then(async (response) => {
 				if (!response.ok) {
 					alert('Error: already registered!');
@@ -101,12 +94,9 @@
 				return;
 			}
 
-			let params = new URLSearchParams({
-				identifier: subjectId
-			});
-
-			fetch(`/sample-api/sessions/authentication?${params}`, {
+			fetch('/sample-api/sessions/authentication', {
 				method: "POST",
+				body: JSON.stringify({ identifier: subjectId }),
 				headers: {
 					"Content-Type": "application/json"
 				}

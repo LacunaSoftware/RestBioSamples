@@ -17,7 +17,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 	) : ControllerBase {
 
 		[HttpPost("authentication")]
-		public async Task<StartBioSessionResponse> StartAuthenticationSessionAsync([FromQuery] BioSubjectReference bioSubjectReference) {
+		public async Task<StartBioSessionResponse> StartAuthenticationSessionAsync([FromBody] BioSubjectReference bioSubjectReference) {
 
 			// This is an example of how to start an authentication session.
 			// You must implement your own security measures to ensure that only users

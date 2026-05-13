@@ -1,4 +1,4 @@
-﻿using Lacuna.RestPki.Api.Bio.Sessions;
+using Lacuna.RestPki.Api.Bio.Sessions;
 using Lacuna.RestPki.Client;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;

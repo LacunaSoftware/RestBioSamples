@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -35,7 +34,7 @@ public class SampleAuthenticationController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<StartBioSessionResponse> StartAuthenticationSession(@ModelAttribute BioSubjectReference subject) throws Exception {
+	public ResponseEntity<StartBioSessionResponse> StartAuthenticationSession(@RequestBody BioSubjectReference subject) throws Exception {
 
 		// This is an example of how to start an authentication session.
 		// You must implement your own security measures to ensure that only users
