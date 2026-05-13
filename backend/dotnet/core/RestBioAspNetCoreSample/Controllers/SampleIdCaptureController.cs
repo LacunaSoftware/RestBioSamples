@@ -48,11 +48,10 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		// TODO: conferir o texto desse endpoit
 		[HttpPost("id-capture/completion")]
 		public async Task<IdentificationDocumentCaptureSessionStatusModel> CompleteIdentificationDocumentCaptureSessionAsync(CompleteBioSessionRequest request) {
 
-			// This is an example of how to complete an enrollment session.
+			// This is an example of how to complete an identification document session.
 			// You must implement your own security measures to ensure that only users
 			// you want to have access to this endpoint can call it.
 
@@ -63,20 +62,13 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			// Available properties of the result:
 			var sessionId = result.SessionId;       // The ID of the session.
-
-			// Enrollment-specific properties (the exact properties may vary based on the actual model structure):
-			// Note: The properties below are based on the liveness model and may need adjustment for enrollment
-			// You should verify the actual properties available in BioEnrollmentSessionStatusModel
-
 			var success = result.Success;           // Whether the biometric session was successful or not.
 
 			if (success == true) {
-				// The biometric session was successful and the user was enrolled.
+				// The biometric session was successful and the user captured an ID document that passed all checks.
 
 				// You may want to store the ID capture status to be used later
 				_ = result.IdCaptureStatus.Success;     // Whether the user captured an ID document.
-				_ = result.IdCaptureStatus.MatchedFace; // Whether the face on the ID document matched the user's face.
-				_ = result.IdCaptureStatus.MatchedFaceLevel; // The level of confidence of the face match.
 
 			} else if (success == false) {
 				// The biometric session was completed, but it was not successful.

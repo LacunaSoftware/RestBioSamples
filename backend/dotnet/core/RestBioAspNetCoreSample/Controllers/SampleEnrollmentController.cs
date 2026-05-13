@@ -69,7 +69,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			var sessionId = result.SessionId;       // The ID of the session.
 
 			// Enrollment-specific properties (the exact properties may vary based on the actual model structure):
-			// Note: The properties below are based on the liveness model and may need adjustment for enrollment
+			// Note: The properties below are based on the enrollment model and may need adjustment for enrollment
 			// You should verify the actual properties available in BioEnrollmentSessionStatusModel
 
 			var success = result.Success;           // Whether the biometric session was successful or not.
