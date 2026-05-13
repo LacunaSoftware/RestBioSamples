@@ -7,8 +7,8 @@
 	<title>RestBioSamples - Generic Frontend Demo</title>
 </head>
 
-<script type="text/javascript" src="https://cdn.lacunasoftware.com/libs/restpki/lacuna-restpki-widget-1.3.1.min.js"
-	integrity="sha256-PziIkD0H3D/3KAcwE/u7u8MTbd6k62IlI9mmqzkc9r0="
+<script type="text/javascript" src="https://cdn.lacunasoftware.com/libs/restpki/lacuna-restpki-widget-1.4.1.min.js"
+	integrity="sha256-4FRHeIXp0hiF+16rENu0xuiEbUqNWO6Xc2nH2I+0vdk="
 	crossorigin="anonymous"></script>
 
 <body>
@@ -56,14 +56,8 @@
 				return;
 			}
 
-			fetch("/sample-api/sessions/enrollment", {
+			fetch(`/sample-api/sessions/enrollment?subjectIdentifier=${encodeURIComponent(subjectId)}`, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					subjectIdentifier: subjectId
-				})
 			}).then(async (response) => {
 				if (!response.ok) {
 					alert('Error: already registered!');
@@ -92,7 +86,7 @@
 
 		async function authenticationTest() {
 			let widget = RestPkiWidget.init();
-
+			
 			let subjectId = document.getElementById('subjectId')?.value;
 
 			if (!subjectId || subjectId.trim() === '') {
@@ -100,14 +94,12 @@
 				return;
 			}
 
-			fetch("/sample-api/sessions/authentication", {
+			fetch('/sample-api/sessions/authentication', {
 				method: "POST",
+				body: JSON.stringify({ identifier: subjectId }),
 				headers: {
 					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					identifier: subjectId
-				})
+				}
 			}).then(async (response) => {
 				if (!response.ok) {
 					alert('Error: Subject not found or not registered!');
