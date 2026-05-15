@@ -43,13 +43,13 @@ public class SampleAuthenticationController {
 		// The response of the following call contains the session URL that
 		// will be loaded in the Widget to start the biometric session.
 
-		StartBioAuthenticationSessionRequest request = new StartBioAuthenticationSessionRequest();
+		var request = new StartBioAuthenticationSessionRequest();
 		request.setSubject(subject);
 		request.setTrustedOrigin(exampleConfig.getTrustedOrigin());
 		// Additional options for the authentication session:
 		// request.set(...)
 
-		StartBioSessionResponse response = service.StartAuthenticationSession(request);
+		var response = service.StartAuthenticationSession(request);
 
 		// Although not mandatory, you may want to save the SessionId in your database
 		// along with your user/session information, as you can use this ID to retrieve
@@ -76,13 +76,13 @@ public class SampleAuthenticationController {
 		// By calling the following endpoint, you will get the final status of the
 		// biometric session.
 
-		BioAuthenticationSessionStatusModel result = service.CompleteAuthenticationSession(request.getTicket());
+		var result = service.CompleteAuthenticationSession(request.getTicket());
 
 		// Available properties of the result:
 		// result.getSessionId() - The ID of the session.
 		// result.isSuccess()    - Whether the biometric session was successful or not.
 
-		Boolean success = result.isSuccess();
+		var success = result.isSuccess();
 
 		if (Boolean.TRUE.equals(success)) {
 			// The biometric session was successful and the user was authenticated.

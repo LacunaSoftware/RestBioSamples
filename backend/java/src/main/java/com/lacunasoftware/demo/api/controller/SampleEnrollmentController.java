@@ -80,13 +80,13 @@ public class SampleEnrollmentController {
 		// By calling the following endpoint, you will get the final status of the
 		// biometric session.
 
-		BioEnrollmentSessionStatusModel result = service.CompleteEnrollmentSession(request.getTicket());
+		var result = service.CompleteEnrollmentSession(request.getTicket());
 
 		// Available properties of the result:
 		// result.getSessionId()  - The ID of the session.
 		// result.isSuccess()     - Whether the biometric session was successful or not.
 
-		Boolean success = result.isSuccess();
+		var success = result.isSuccess();
 
 		if (Boolean.TRUE.equals(success)) {
 			// The biometric session was successful and the user was enrolled.
@@ -109,7 +109,7 @@ public class SampleEnrollmentController {
 
 	@GetMapping("status")
 	public ResponseEntity<BioEnrollmentSessionStatusModel> GetEnrollmentSessionStatus(@RequestParam UUID sessionId) throws Exception {
-		BioEnrollmentSessionStatusModel status = service.GetEnrollmentSessionStatus(sessionId);
+		var status = service.GetEnrollmentSessionStatus(sessionId);
 		return ResponseEntity.ok(status);
 	}
 

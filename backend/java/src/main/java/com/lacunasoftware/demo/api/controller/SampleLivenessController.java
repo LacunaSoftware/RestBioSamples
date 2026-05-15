@@ -43,14 +43,14 @@ public class SampleLivenessController {
         // The response of the following call contains the session URL that
         // will be loaded in the Widget to start the biometric session.
 
-        StartLivenessSessionRequest request = new StartLivenessSessionRequest();
+        var request = new StartLivenessSessionRequest();
         request.setTrustedOrigin(exampleConfig.getTrustedOrigin());
         request.setCaptureIdentificationDocument(captureIdentificationDocument);
         request.setSubjectIdentifier("Example");
         // Additional request properties:
         // request.setFaceCaptureProvider(FaceCaptureProviders.FACETECLIVENESS3D);
 
-        StartBioSessionResponse response = service.StartLivenessSession(request);
+        var response = service.StartLivenessSession(request);
 
         // Although not mandatory, you may want to save the SessionId in your database
         // along with your user/session information, as you can use this ID to retrieve
@@ -77,7 +77,7 @@ public class SampleLivenessController {
         // By calling the following endpoint, you will get the final status of the
         // biometric session.
 
-        LivenessSessionStatusModel result = service.CompleteLivenessSession(request.getTicket());
+        var result = service.CompleteLivenessSession(request.getTicket());
 
         // Available properties of the result:
         // result.getSessionId()                                    - The ID of the session.
@@ -100,7 +100,7 @@ public class SampleLivenessController {
                 // When the session has ResultDataAvailable = true, it means that
                 // you can now retrieve the images captured during the session.
 
-                BioSessionResultDataModel resultData = service.GetSessionResultData(result.getSessionId());
+                //BioSessionResultDataModel resultData = service.GetSessionResultData(result.getSessionId());
 
                 // Available properties of resultData:
                 // resultData.getFaceData().getFaceImage().getContent()              - The image of the user's face captured during the liveness test.

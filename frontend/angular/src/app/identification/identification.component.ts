@@ -6,7 +6,7 @@ import { MatButtonModule } from '@angular/material/button';
 import RestPkiWidget, { BioSessionInterruptedError } from 'lacuna-restpki-widget';
 import { firstValueFrom } from 'rxjs';
 import { ErrorDisplayComponent } from '../error-display/error-display.component';
-import { CompleteBioSessionResponse, RestBioService, StartBioSessionResponse } from '../services/rest-bio.service';
+import { CompleteBioSessionResponse, RestBioService } from '../services/rest-bio.service';
 import { SubjectIdentifierInputComponent } from '../subject-identifier-input/subject-identifier-input.component';
 
 @Component({
@@ -16,7 +16,6 @@ import { SubjectIdentifierInputComponent } from '../subject-identifier-input/sub
 			CommonModule,
 			FormsModule,
 			HttpClientModule,
-			SubjectIdentifierInputComponent,
 			MatButtonModule,
 			ErrorDisplayComponent
   ],
