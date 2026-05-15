@@ -84,6 +84,33 @@
 			});
 		}
 
+		async function identificationTest() {
+			let widget = RestPkiWidget.init();
+
+			fetch("/sample-api/sessions/identification", {
+				method: "POST",
+			}).then(async (response) => {
+				let sessionInfo = await response.json();
+				let result = await widget.performBioSession(sessionInfo.sessionUrl);
+				fetch("/sample-api/sessions/identification/completion", {
+					method: "POST",
+					body: JSON.stringify({
+						ticket: result.completeTicket
+					}),
+					headers: {
+						"Content-Type": "application/json"
+					}
+				}).then(async (response) => {
+					let completionResult = await response.json();
+					displayResponse(completionResult);
+					console.log(completionResult);
+				});
+			}).catch(error => {
+				console.error('Error:', error);
+				alert('Identification error!');
+			});
+		}
+
 		async function authenticationTest() {
 			let widget = RestPkiWidget.init();
 			
@@ -131,7 +158,9 @@
 	<br><br>
 	<a onclick="livenessTest()" href="#">Liveness Test</a><br><br>
 	<a onclick="enrollmentTest()" href="#">Enrollment Test</a><br><br>
-	<a onclick="authenticationTest()" href="#">Authentication Test</a>
+	<a onclick="authenticationTest()" href="#">Authentication Test</a><br><br>
+	<a onclick="identificationTest()" href="#">Identification Test</a>
+
 	<br><br>
 	<h3>Result:</h3>
 	<textarea id="responseArea" style="width: 30%; height: 250px;"></textarea>
