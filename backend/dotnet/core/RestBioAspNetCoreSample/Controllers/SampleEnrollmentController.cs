@@ -7,7 +7,7 @@ using RestBioAspNetCoreSample.Configuration;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/sample-api/sessions")]
+	[Route("/sample-api/sessions/enrollment")]
 	public class SampleEnrollmentController(
 
 		IRestBioService restBioService,
@@ -15,7 +15,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 	) : ControllerBase {
 
-		[HttpPost("enrollment")]
+		[HttpPost]
 		public async Task<StartBioSessionResponse> StartEnrollmentSessionAsync(
 			[FromQuery] string subjectIdentifier,
 			[FromQuery] bool? captureIdentificationDocument = false,
@@ -53,7 +53,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("enrollment/completion")]
+		[HttpPost("completion")]
 		public async Task<BioEnrollmentSessionStatusModel> CompleteEnrollmentSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an enrollment session.
@@ -92,7 +92,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-		[HttpGet("enrollment/status")]
+		[HttpGet("status")]
 		public async Task<BioEnrollmentSessionStatusModel> GetEnrollmentSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetEnrollmentSessionStatusAsync(sessionId);
 		}

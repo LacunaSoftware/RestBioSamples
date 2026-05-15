@@ -7,7 +7,7 @@ using RestBioAspNetCoreSample.Configuration;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/sample-api/sessions")]
+	[Route("/sample-api/sessions/id-capture")]
 	public class SampleIdCaptureController(
 
 		IRestBioService restBioService,
@@ -15,7 +15,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 	) : ControllerBase {
 
-		[HttpPost("id-capture")]
+		[HttpPost]
 		public async Task<StartBioSessionResponse> StartIdentificationDocumentCaptureSessionAsync() {
 
 			// This is an example of how to start an identification document capture session.
@@ -27,10 +27,6 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 			var response = await restBioService.StartIdentificationDocumentCaptureSessionAsync(new() {
 				TrustedOrigin = exampleConfig.Value.TrustedOrigin
-				// Additional properties for ID document capture:
-				// DocumentTypes = new[] { "passport", "driver_license", "national_id" }, // Optional: allowed document types
-				// ValidateDocument = true, // Optional: whether to validate the document authenticity
-				// ExtractData = true // Optional: whether to extract data from the document using OCR
 			});
 
 			// Although not mandatory, you may want to save the SessionId in your database
@@ -48,7 +44,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("id-capture/completion")]
+		[HttpPost("completion")]
 		public async Task<IdentificationDocumentCaptureSessionStatusModel> CompleteIdentificationDocumentCaptureSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an identification document session.
@@ -83,7 +79,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-		[HttpGet("id-capture/status")]
+		[HttpGet("status")]
 		public async Task<IdentificationDocumentCaptureSessionStatusModel> GetIdentificationDocumentCaptureSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetIdentificationDocumentCaptureSessionStatusAsync(sessionId);
 		}

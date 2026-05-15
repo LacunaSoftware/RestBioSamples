@@ -7,7 +7,7 @@ using RestBioAspNetCoreSample.Configuration;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/sample-api/sessions")]
+	[Route("/sample-api/sessions/liveness")]
 	public class SampleLivenessController(
 
 		IRestBioService restBioService,
@@ -15,7 +15,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 	) : ControllerBase {
 
-		[HttpPost("liveness")]
+		[HttpPost]
 		public async Task<StartBioSessionResponse> StartLivenessSessionAsync([FromQuery] bool captureIdentificationDocument = false) {
 
 			// This is an example of how to start a liveness session.
@@ -48,7 +48,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("liveness/completion")]
+		[HttpPost("completion")]
 		public async Task<LivenessSessionStatusModel> CompleteLivenessSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete a liveness session.
@@ -111,7 +111,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-		[HttpGet("liveness/status")]
+		[HttpGet("status")]
 		public async Task<BioSessionResultDataModel> GetLivenessSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetSessionResultDataAsync(sessionId);
 		}

@@ -16,7 +16,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 
 	) : ControllerBase {
 
-		[HttpPost("authentication")]
+		[HttpPost]
 		public async Task<StartBioSessionResponse> StartAuthenticationSessionAsync([FromBody] BioSubjectReference bioSubjectReference) {
 
 			// This is an example of how to start an authentication session.
@@ -47,7 +47,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return response;
 		}
 
-		[HttpPost("authentication/completion")]
+		[HttpPost("completion")]
 		public async Task<BioAuthenticationSessionStatusModel> CompleteAuthenticationSessionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an authentication session.
@@ -84,7 +84,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-		[HttpGet("authentication/status")]
+		[HttpGet("status")]
 		public async Task<BioAuthenticationSessionStatusModel> GetAuthenticationSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetAuthenticationSessionStatusAsync(sessionId);
 		}

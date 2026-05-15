@@ -8,7 +8,7 @@ using RestBioAspNetCoreSample.Configuration;
 namespace RestBioAspNetCoreSample.Controllers {
 
 	[ApiController]
-	[Route("/sample-api/sessions")]
+	[Route("/sample-api/sessions/identification")]
 	public class SampleIdentificationController(
 
 		IRestBioService restBioService,
@@ -21,7 +21,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return await restBioService.IdentifyAsync(request, subscriptionId);
 		}
 
-		[HttpPost("identification")]
+		[HttpPost]
 		public async Task<StartBioSessionResponse> StartIdentificationAsync() {
 
 			// This is an example of how to start an identification session.
@@ -48,12 +48,12 @@ namespace RestBioAspNetCoreSample.Controllers {
 			// Available properties of the response:
 			_ = response.SessionUrl;    // The URL to be loaded in the Widget to start the biometric session.
 			_ = response.SessionId;     // The ID of the session.
-			_ = response.SessionType;   // The type of the session (IdentificationDocumentCapture).
+			_ = response.SessionType;   // The type of the session (Identification).
 
 			return response;
 		}
 
-		[HttpPost("identification/completion")]
+		[HttpPost("completion")]
 		public async Task<BioIdentificationSessionStatusModel> GetIdentificationSessionCompletionAsync(CompleteBioSessionRequest request) {
 
 			// This is an example of how to complete an identification session.
@@ -84,7 +84,7 @@ namespace RestBioAspNetCoreSample.Controllers {
 			return result;
 		}
 
-		[HttpGet("identification/status")]
+		[HttpGet("status")]
 		public async Task<BioIdentificationSessionStatusModel> GetIdentificationSessionStatusAsync(Guid sessionId) {
 			return await restBioService.GetIdentificationSessionStatusAsync(sessionId);
 		}
