@@ -19,7 +19,7 @@ import com.lacunasoftware.restpkicore.StartBioSessionResponse;
 import com.lacunasoftware.restpkicore.StartIdentificationDocumentCaptureSessionRequest;
 
 @RestController
-@RequestMapping("sample-api/sessions/identification/document-capture")
+@RequestMapping("sample-api/sessions/id-capture")
 public class SampleIdentificationSessionDocumentCaptureController {
     
     private final RestBioService service;
