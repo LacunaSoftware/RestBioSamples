@@ -1,0 +1,88 @@
+﻿using Lacuna.RestPki.Api.Bio.Sessions;
+using Lacuna.RestPki.Client;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using RestBioAspNetCoreSample.Configuration;
+
+namespace RestBioAspNetCoreSample.Controllers {
+
+	[ApiController]
+	[Route("/sample-api/sessions/id-capture")]
+	public class SampleIdCaptureController(
+
+		IRestBioService restBioService,
+		IOptions<ExampleConfig> exampleConfig
+
+	) : ControllerBase {
+
+		[HttpPost]
+		public async Task<StartBioSessionResponse> StartIdentificationDocumentCaptureSessionAsync() {
+
+			// This is an example of how to start an identification document capture session.
+			// You must implement your own security measures to ensure that only users
+			// you want to have access to this endpoint can call it.
+
+			// The response of the following call contains the session URL that
+			// will be loaded in the Widget to start the biometric session.
+
+			var response = await restBioService.StartIdentificationDocumentCaptureSessionAsync(new() {
+				TrustedOrigin = exampleConfig.Value.TrustedOrigin
+			});
+
+			// Although not mandatory, you may want to save the SessionId in your database
+			// along with your user/session information, as you can use this ID to retrieve
+			// the status of the session by later using the GetIdentificationDocumentCaptureSessionStatusAsync()
+			// method. But at the end of the session, the Widget will return you a ticket
+			// that you can use to retrieve the session status without needing to store
+			// the SessionId.
+
+			// Available properties of the response:
+			_ = response.SessionUrl;    // The URL to be loaded in the Widget to start the biometric session.
+			_ = response.SessionId;     // The ID of the session.
+			_ = response.SessionType;   // The type of the session (IdentificationDocumentCapture).
+
+			return response;
+		}
+
+		[HttpPost("completion")]
+		public async Task<IdentificationDocumentCaptureSessionStatusModel> CompleteIdentificationDocumentCaptureSessionAsync(CompleteBioSessionRequest request) {
+
+			// This is an example of how to complete an identification document session.
+			// You must implement your own security measures to ensure that only users
+			// you want to have access to this endpoint can call it.
+
+			// By calling the following endpoint, you will get the final status of the
+			// biometric session.
+
+			var result = await restBioService.CompleteIdentificationDocumentCaptureSessionAsync(request.Ticket);
+
+			// Available properties of the result:
+			var sessionId = result.SessionId;       // The ID of the session.
+			var success = result.Success;           // Whether the biometric session was successful or not.
+
+			if (success == true) {
+				// The biometric session was successful and the user captured an ID document that passed all checks.
+
+				// You may want to store the ID capture status to be used later
+				_ = result.IdCaptureStatus.Success;     // Whether the user captured an ID document.
+
+			} else if (success == false) {
+				// The biometric session was completed, but it was not successful.
+				// Here you may want to retry or increase an attempt counter of the user.
+
+			} else {
+				// The biometric session is still in progress. This should not happen here,
+				// as the Widget will only provide a complete ticket when the session is completed
+				// (either successfully or not).
+			}
+
+			return result;
+		}
+
+		[HttpGet("status")]
+		public async Task<IdentificationDocumentCaptureSessionStatusModel> GetIdentificationDocumentCaptureSessionStatusAsync(Guid sessionId) {
+			return await restBioService.GetIdentificationDocumentCaptureSessionStatusAsync(sessionId);
+		}
+
+	}
+}

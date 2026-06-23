@@ -96,19 +96,14 @@ export class RestBioService {
 
 	// Enrollment session endpoints
 	startEnrollmentSession(subjectIdentifier: string, captureIdentificationDocument?: boolean, dangerousOverrideIfAlreadyEnrolled?: boolean): Observable<StartBioSessionResponse> {
-		const body: any = {
-			subjectIdentifier: subjectIdentifier
-		};
-		
+		let url = `/sample-api/sessions/enrollment?subjectIdentifier=${encodeURIComponent(subjectIdentifier)}`;
 		if (captureIdentificationDocument !== undefined) {
-			body.captureIdentificationDocument = captureIdentificationDocument;
+			url += `&captureIdentificationDocument=${captureIdentificationDocument}`;
 		}
-		
 		if (dangerousOverrideIfAlreadyEnrolled !== undefined) {
-			body.dangerousOverrideIfAlreadyEnrolled = dangerousOverrideIfAlreadyEnrolled;
+			url += `&dangerousOverrideIfAlreadyEnrolled=${dangerousOverrideIfAlreadyEnrolled}`;
 		}
-		
-		return this.http.post<StartBioSessionResponse>(`/sample-api/sessions/enrollment`, body);
+		return this.http.post<StartBioSessionResponse>(url, {});
 	}
 
 	getEnrollmentSessionStatus(sessionId: string): Observable<any> {
@@ -177,11 +172,13 @@ export class RestBioService {
 		return this.http.post<BioIdentificationResponse>(`/sample-api/sessions/identification2d`, body);
 	}
 
-	startIdentificationSession(bioIdentificationRequest: BioIdentificationRequest): Observable<BioIdentificationResponse> {
-		return this.http.post<BioIdentificationResponse>(
-			`/sample-api/sessions/identification`,
-			bioIdentificationRequest
-		);
+	startIdentificationSession(): Observable<StartBioSessionResponse> {
+		return this.http.post<StartBioSessionResponse>(`/sample-api/sessions/identification`, {});
+	}
+
+	completeIdentificationSession(ticket: string): Observable<CompleteBioSessionResponse> {
+		const body: CompleteBioSessionRequest = { ticket };
+		return this.http.post<CompleteBioSessionResponse>(`/sample-api/sessions/identification/completion`, body);
 	}
 
 	getIdentificationSessionStatus(ticket: string): Observable<any> {

@@ -23,8 +23,8 @@ export class AppComponent {
 			'Enrollment2d': '/enrollment-2d',
 			'Authentication': '/authentication',
 			'Authentication2d': '/authentication-2d',
-			'Identification': 'identification',
-			'Identification2d': 'identification-2d'
+			'Identification': '/identification',
+			'Identification2d': '/identification-2d'
 		};
 		this.router.navigate([routeMap[type]]);
 	}
